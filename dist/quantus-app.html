@@ -1530,7 +1530,7 @@ footer {
             <div class="select-wrap">
               <label class="sr-only" for="sort">Sort results</label>
               <select id="sort">
-                <option value="relevance">Sort: best match</option>
+                <option value="relevance">Sort: best match (open + nearest)</option>
                 <option value="distance">Sort: nearest</option>
                 <option value="rating">Sort: highest rated</option>
                 <option value="name">Sort: A to Z</option>
@@ -2297,42 +2297,103 @@ function passesFilters(listing) {
 
 /* --- relevance ----------------------------------------------------------- */
 /*
- * "Best match" ranking. These weights are a product judgement, not a fact:
- * an exact ZIP hit is the strongest signal a searcher can give, city is next,
- * then proximity, then quality. Tune the constants to change what the
- * directory considers a good answer.
+ * "Best match" is a PRECEDENCE CHAIN, not a weighted sum.
+ *
+ * This started life as a sum of weights, and that could not express the rule
+ * the directory actually needs. In a sum, every term can be out-voted by a
+ * coalition of the others: at 3.6 vs 4.5 miles a hyperbolic proximity curve
+ * differs by only ~6 points, which a "verified" bonus plus a rating edge
+ * beats outright - so a farther shop climbed above a nearer one. Retuning the
+ * constants only pushes that failure further out, because any decaying curve
+ * flattens. Strict precedence has to be expressed as ordered comparisons.
+ *
+ * The order, for someone who needs somewhere NOW:
+ *
+ *   1. Open now beats closed. A closed counter cannot help in an urgent
+ *      moment, however near it is.
+ *   2. Nearer beats farther, measured in half-mile bands. Banding is what
+ *      stops a 50-foot difference from outranking a whole star: inside the
+ *      same band the two shops are "equally close" and quality decides.
+ *   3. Then how well the text matched (an exact ZIP is the strongest signal
+ *      a searcher can give).
+ *   4. Only then rating, verification, and name.
+ *
+ * Rating is never consulted until distance has already tied, so no star count
+ * can lift a farther shop above a nearer one. With no anchor (nothing searched
+ * yet) step 2 is skipped and quality does the separating, which is the right
+ * behaviour for browsing.
  */
-function relevance(listing) {
+const BAND_MILES = 0.5;
+
+const TEXT_WEIGHT = {
+  zipExact: 120,
+  zipPrefix: 60,
+  cityExact: 70,
+  cityPartial: 40,
+  namePrefix: 30,
+  namePartial: 15,
+};
+
+/** How well a listing answers the typed query. Distance plays no part here. */
+function textScore(listing) {
   const q = state.query.trim().toLowerCase();
+  if (!q) return 0;
   let score = 0;
 
-  if (q) {
-    if (listing.zip === q) score += 120;
-    else if (listing.zip.startsWith(q)) score += 60;
-    if (listing.city.toLowerCase() === q) score += 70;
-    else if (listing.city.toLowerCase().includes(q)) score += 40;
-    if (listing.name.toLowerCase().startsWith(q)) score += 30;
-    else if (listing.name.toLowerCase().includes(q)) score += 15;
-  }
+  if (listing.zip === q) score += TEXT_WEIGHT.zipExact;
+  else if (listing.zip.startsWith(q)) score += TEXT_WEIGHT.zipPrefix;
 
-  const miles = milesFromAnchor(listing);
-  if (miles !== null) score += Math.max(0, 50 - miles);
+  const city = listing.city.toLowerCase();
+  if (city === q) score += TEXT_WEIGHT.cityExact;
+  else if (city.includes(q)) score += TEXT_WEIGHT.cityPartial;
 
-  score += listing.rating * 6;
-  if (listing.verified) score += 8;
-  if (isOpenNow(listing)) score += 5;
+  const name = listing.name.toLowerCase();
+  if (name.startsWith(q)) score += TEXT_WEIGHT.namePrefix;
+  else if (name.includes(q)) score += TEXT_WEIGHT.namePartial;
+
   return score;
 }
 
+/** Half-mile band, or null when nothing has been searched yet. */
+function distanceBand(listing) {
+  const miles = milesFromAnchor(listing);
+  return miles === null ? null : Math.round(miles / BAND_MILES);
+}
+
+function bestMatch(a, b) {
+  // 1. open beats closed, always
+  const aOpen = isOpenNow(a);
+  const bOpen = isOpenNow(b);
+  if (aOpen !== bOpen) return aOpen ? -1 : 1;
+
+  // 2. nearer band beats farther band
+  const aBand = distanceBand(a);
+  const bBand = distanceBand(b);
+  if (aBand !== null && bBand !== null && aBand !== bBand) return aBand - bBand;
+
+  // 3. how well the query matched
+  const byText = textScore(b) - textScore(a);
+  if (byText !== 0) return byText;
+
+  // 4. quality, only now that everything above has tied
+  return (
+    b.rating - a.rating ||
+    Number(b.verified) - Number(a.verified) ||
+    a.name.localeCompare(b.name)
+  );
+}
+
 const SORTERS = {
-  relevance: (a, b) => relevance(b) - relevance(a) || a.name.localeCompare(b.name),
+  relevance: bestMatch,
   rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews,
   name: (a, b) => a.name.localeCompare(b.name),
+  // Raw distance, ignoring opening hours - the one sort that answers
+  // "what is physically closest" without any judgement mixed in.
   distance: (a, b) => {
     const da = milesFromAnchor(a);
     const db = milesFromAnchor(b);
-    if (da === null || db === null) return relevance(b) - relevance(a);
-    return da - db;
+    if (da === null || db === null) return bestMatch(a, b);
+    return da - db || bestMatch(a, b);
   },
 };
 
