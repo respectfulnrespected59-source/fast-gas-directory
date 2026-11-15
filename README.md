@@ -86,10 +86,32 @@ command. The blueprint sets CSP, HSTS, `X-Frame-Options`,
 
 ## Tests
 
-`fg-probe.mjs` drives the running site with Playwright: 27 checks covering
-console cleanliness, ZIP resolution, the no-program path, medical-only
-invariants, chip-count/result-total agreement, the detail dialog, and
-horizontal overflow at 1440 and 390.
+`tests/fg-probe.mjs` drives the running site with Playwright: 31 checks
+covering console cleanliness, ZIP resolution, the no-program path,
+medical-only invariants, chip-count/result-total agreement, best-match
+precedence, the detail dialog, and horizontal overflow at 1440 and 390.
+
+```sh
+python -m http.server 8877                 # serve the site
+node tests/fg-probe.mjs                    # test localhost
+FG_URL=https://fast-gas-directory.onrender.com/ node tests/fg-probe.mjs
+```
+
+Needs Playwright on the path. Screenshots land in `dist/` (git-ignored).
+
+### Ranking
+
+`bestMatch()` in `assets/app.js` is a precedence chain, not a weighted sum:
+
+> open now > half-mile distance band > text match > rating > verified > name
+
+Proximity strictly outranks star rating, for the case where someone needs
+somewhere open right now rather than the best-reviewed place across town. A
+weighted sum could not express that - any decaying distance curve flattens
+far enough out that a `verified` bonus plus a rating edge out-votes it, so
+farther shops climbed above nearer ones. Rating is never consulted until
+distance has tied. The half-mile band is what stops a 50-foot difference from
+outranking a whole star.
 
 ## 21+
 
