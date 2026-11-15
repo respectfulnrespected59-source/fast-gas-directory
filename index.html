@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'self'; object-src 'none'">
+  <title>Fast Gas - Nationwide Dispensary Directory</title>
+  <meta name="description" content="Fast Gas is a nationwide cannabis dispensary directory concept: search any US ZIP code, see your state's program status, and browse sample listings across all 50 states. 21+. No sales are processed.">
+  <meta name="theme-color" content="#04170f">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#directory">Skip to the directory</a>
+
+  <!-- Icon sprite. Gradients are declared once here so repeated instances of
+       the mark can never collide on duplicate ids. -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="fgGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff0c2"/>
+        <stop offset=".42" stop-color="#ffc73a"/>
+        <stop offset="1" stop-color="#b8860b"/>
+      </linearGradient>
+      <radialGradient id="fgHalo" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#ffc73a" stop-opacity=".45"/>
+        <stop offset="1" stop-color="#ffc73a" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- The mark: a gold bong. Beaker base, straight tube, flared
+           mouthpiece, angled downstem and bowl, money-green water line,
+           lavender smoke curl. -->
+      <symbol id="bong" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="23" fill="url(#fgHalo)"/>
+        <!-- smoke -->
+        <path d="M20 6.2C20 4 23.4 4.4 23.4 2.4 23.4 1.1 21.9.7 20.8 1.3"
+              fill="none" stroke="#b49bff" stroke-width="1.7"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- beaker body: wide base, narrow neck, flared mouthpiece -->
+        <path d="M13.2 7H26.8L23.2 12.8V24.5L31.8 40.6Q33.2 43.4 30.2 43.4H9.8Q6.8 43.4 8.2 40.6L16.8 24.5V12.8Z"
+              fill="url(#fgGold)"/>
+        <!-- water, filled not drawn: this is what stops it reading as a collar -->
+        <path d="M12.26 33H27.74L31.8 40.6Q33.2 43.4 30.2 43.4H9.8Q6.8 43.4 8.2 40.6Z"
+              fill="#19c37d"/>
+        <!-- downstem, entering the water and exiting through the shoulder -->
+        <path d="M22.5 34.5 33.5 23" fill="none" stroke="url(#fgGold)"
+              stroke-width="3" stroke-linecap="round"/>
+        <!-- bowl: a cone that widens away from the stem -->
+        <path d="M31.83 22.19 35.46 16.68 39.92 20.96 34.57 24.81Z" fill="url(#fgGold)"/>
+      </symbol>
+
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M16.5 16.5 21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24">
+        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24">
+        <path d="M12 3l7 3v6c0 4.2-2.9 7.9-7 9-4.1-1.1-7-4.8-7-9V6z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M9 12l2.2 2.2L15.5 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-id" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="9" cy="11" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M14 10h4M14 14h4M5.5 16c.9-1.5 2-2.2 3.5-2.2S11.6 14.5 12.5 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-scale" viewBox="0 0 24 24">
+        <path d="M12 4v16M7 20h10M4 8h16M4 8l-2.5 6h5zM20 8l2.5 6h-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24">
+        <path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="topbar">
+    <strong>21+ only</strong> &nbsp;/&nbsp; Nationwide directory concept &nbsp;/&nbsp;
+    <em>No sales, carts or payments on this site</em>
+  </div>
+
+  <header>
+    <nav class="nav shell" aria-label="Main navigation">
+      <a class="logo" href="#top" aria-label="Fast Gas, home">
+        <svg class="logo-mark" aria-hidden="true" focusable="false"><use href="#bong"/></svg>
+        <span class="logo-word">FAST GAS<small>Directory</small></span>
+      </a>
+
+      <button class="nav-toggle" type="button" id="navToggle" aria-expanded="false" aria-controls="navLinks">
+        <svg aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#directory">Directory</a>
+        <a href="#states">All 50 states</a>
+        <a href="#how">How it works</a>
+        <a href="#standards">Standards</a>
+        <a class="button button--sm" href="#directory">Find a dispensary <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-grid shell">
+        <div>
+          <p class="hero-kicker"><span class="pulse" aria-hidden="true"></span> All 50 states &middot; 21+ &middot; Updated snapshot</p>
+          <h1>Every state.<span class="tint-gold">Every legal</span><span class="tint-lav">storefront.</span></h1>
+          <p class="hero-copy">
+            Fast Gas is a nationwide dispensary directory. Drop in any US ZIP
+            code and it tells you the state program that applies, what that
+            legally permits, and which listings nearby match what you need.
+          </p>
+          <p class="hero-note">
+            Design concept. State program statuses are a snapshot and change
+            often - always confirm with your state regulator. Listings are
+            clearly labelled sample data; no live inventory, ordering or payment.
+          </p>
+        </div>
+
+        <div class="hero-side">
+          <div class="console">
+          <h2>Search the directory.</h2>
+          <p class="console-sub">ZIP code, city or state - all 50 states resolve.</p>
+
+          <form id="heroForm" novalidate>
+            <div class="search-row">
+              <div class="search-field">
+                <svg aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+                <label class="sr-only" for="heroQuery">ZIP code, city or state</label>
+                <input id="heroQuery" name="heroQuery" type="text" autocomplete="postal-code"
+                       placeholder="94607, Denver, or Michigan"
+                       aria-describedby="heroResult">
+              </div>
+              <button class="button" type="submit">Search <span aria-hidden="true">&rarr;</span></button>
+            </div>
+            <p class="console-hint">
+              Try
+              <button type="button" data-example="94607">94607</button>,
+              <button type="button" data-example="10011">10011</button>,
+              <button type="button" data-example="Denver">Denver</button> or
+              <button type="button" data-example="Oklahoma">Oklahoma</button>.
+            </p>
+            <p class="form-result" id="heroResult" role="status" aria-live="polite"></p>
+          </form>
+          </div>
+
+          <div class="hero-key" id="heroKey" aria-label="What the colours mean"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="stat-strip">
+      <div class="stats shell" id="statStrip">
+        <div class="stat"><b id="statListings">&mdash;</b><span>Sample listings</span></div>
+        <div class="stat"><b id="statStates">&mdash;</b><span>States with listings</span></div>
+        <div class="stat"><b id="statMetros">&mdash;</b><span>Metro areas</span></div>
+        <div class="stat"><b id="statRec">&mdash;</b><span>Adult-use states</span></div>
+      </div>
+    </div>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="ticker"></div>
+    </div>
+
+    <section id="directory">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 / The directory</p>
+            <h2>Filter it down<br>to your block.</h2>
+          </div>
+          <p>
+            Every filter here is a real constraint applied to the dataset, not
+            a decorative toggle. Combine them, sort them, and the result count
+            and state guidance update together.
+          </p>
+        </div>
+
+        <div class="toolbar">
+          <div class="toolbar-row">
+            <div class="toolbar-search">
+              <svg aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+              <label class="sr-only" for="query">Filter by name, city, state or ZIP</label>
+              <input id="query" type="search" placeholder="Name, city, state or ZIP">
+            </div>
+            <div class="select-wrap">
+              <label class="sr-only" for="sort">Sort results</label>
+              <select id="sort">
+                <option value="relevance">Sort: best match</option>
+                <option value="distance">Sort: nearest</option>
+                <option value="rating">Sort: highest rated</option>
+                <option value="name">Sort: A to Z</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="chips" role="group" aria-label="Filter listings" id="chips">
+            <button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="chip-count" data-count="all">0</span></button>
+            <button class="chip" type="button" data-filter="rec" aria-pressed="false">Adult-use <span class="chip-count" data-count="rec">0</span></button>
+            <button class="chip" type="button" data-filter="med" aria-pressed="false">Medical <span class="chip-count" data-count="med">0</span></button>
+            <button class="chip" type="button" data-filter="delivery" aria-pressed="false">Delivery <span class="chip-count" data-count="delivery">0</span></button>
+            <button class="chip" type="button" data-filter="open" aria-pressed="false">Open now <span class="chip-count" data-count="open">0</span></button>
+            <button class="chip" type="button" data-filter="verified" aria-pressed="false">Verified <span class="chip-count" data-count="verified">0</span></button>
+            <button class="chip" type="button" data-filter="ada" aria-pressed="false">ADA access <span class="chip-count" data-count="ada">0</span></button>
+          </div>
+        </div>
+
+        <div class="legality" id="legality" data-tone="money">
+          <div class="legality-flag" id="legalityFlag" aria-hidden="true">US</div>
+          <div>
+            <h3 id="legalityTitle">Nationwide view</h3>
+            <p id="legalityBody">
+              Search a ZIP or pick a state to see the program that applies there.
+            </p>
+          </div>
+          <button class="button button--ghost button--sm" type="button" id="legalityAction" hidden>
+            Browse states <span aria-hidden="true">&darr;</span>
+          </button>
+        </div>
+
+        <div class="result-bar">
+          <p class="result-count" id="resultCount">Loading the directory&hellip;</p>
+          <button class="result-reset" type="button" id="resetFilters" hidden>Clear all filters</button>
+        </div>
+
+        <div class="result-grid" id="results"></div>
+
+        <noscript>
+          <div class="empty">
+            <h3>The directory needs JavaScript</h3>
+            <p>Search, filtering and the state program lookup all run in your browser. Enable JavaScript to use them.</p>
+          </div>
+        </noscript>
+
+        <div class="load-more">
+          <button class="button button--ghost" type="button" id="loadMore" hidden>
+            Show more listings <span aria-hidden="true">&darr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="states">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow eyebrow--lav">02 / Coast to coast</p>
+            <h2>All 50 states,<br>plus D.C.</h2>
+          </div>
+          <p>
+            Programs differ state by state, and a directory that pretends
+            otherwise is useless. Pick a state to filter the listings above and
+            read what its program actually permits.
+          </p>
+        </div>
+
+        <ul class="legend">
+          <li><i class="sw-rec"></i> Adult-use + medical</li>
+          <li><i class="sw-med"></i> Medical only</li>
+          <li><i class="sw-cbd"></i> Low-THC / CBD only</li>
+          <li><i class="sw-none"></i> No state program</li>
+        </ul>
+
+        <div class="state-grid" id="stateGrid"></div>
+      </div>
+    </section>
+
+    <section class="section--light" id="how">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 / How it works</p>
+            <h2>Three steps.<br>No guessing.</h2>
+          </div>
+          <p>
+            A directory's only job is to get you to the right counter with the
+            right paperwork. These are the three things that actually decide
+            whether your trip is wasted.
+          </p>
+        </div>
+
+        <div class="steps">
+          <article class="step">
+            <h3>Check the program</h3>
+            <p>
+              Enter a ZIP. Fast Gas resolves it to a state and tells you whether
+              that state runs adult-use retail, a medical-patient program, a
+              low-THC program, or nothing at all.
+            </p>
+          </article>
+          <article class="step">
+            <h3>Filter to your needs</h3>
+            <p>
+              Narrow by delivery, open hours, ADA access or verification status.
+              In medical-only states the listings say so, because a recreational
+              walk-in is not an option there.
+            </p>
+          </article>
+          <article class="step">
+            <h3>Bring the right ID</h3>
+            <p>
+              Adult-use needs a valid government-issued ID showing 21+. Medical
+              programs need your state patient credential. Confirm current rules
+              with the regulator before you travel.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="standards">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">04 / Clear by design</p>
+            <h2>What this is.<br>What it is not.</h2>
+          </div>
+          <p>
+            There are no invented ratings on real businesses, no press quotes
+            and no borrowed customer claims. Trust starts with saying plainly
+            what you are looking at.
+          </p>
+        </div>
+
+        <div class="standards">
+          <article class="standard">
+            <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-eye"/></svg></div>
+            <h3>Sample listings, labelled</h3>
+            <p>
+              Business names in this directory are fictional and generated.
+              Cities, ZIP codes and state programs are real. Nothing here claims
+              to describe an actual storefront.
+            </p>
+          </article>
+          <article class="standard">
+            <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-scale"/></svg></div>
+            <h3>A snapshot, not legal advice</h3>
+            <p>
+              Program statuses reflect a point in time and change with
+              legislation and licensing. Each state card names its regulator so
+              you can verify the current rule at the source.
+            </p>
+          </article>
+          <article class="standard">
+            <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-id"/></svg></div>
+            <h3>21+ throughout</h3>
+            <p>
+              This concept is built for adults 21 and over. Medical-only states
+              are marked separately because they require a state-issued patient
+              credential, not just age.
+            </p>
+          </article>
+          <article class="standard">
+            <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div>
+            <h3>Nothing leaves your browser</h3>
+            <p>
+              There is no cart, no checkout and no backend. Searches and filters
+              run locally; the forms validate and then tell you plainly that
+              nothing was sent or stored.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section--light" id="faq">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">05 / Questions</p>
+            <h2>The honest FAQ.</h2>
+          </div>
+          <p>Short answers, including the ones that are inconvenient.</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Are these real dispensaries?</summary>
+            <div class="faq-answer"><p>
+              No. Every business name is fictional and deterministically
+              generated, so the directory can demonstrate real search, filtering
+              and distance behaviour without putting words in a real company's
+              mouth. The cities, ZIP codes and state program statuses are real.
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I order from this site?</summary>
+            <div class="faq-answer"><p>
+              No. There is no cart, checkout, payment processor or backend of any
+              kind. The forms validate your input and then confirm that nothing
+              was transmitted or stored.
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>How does the ZIP lookup cover all 50 states?</summary>
+            <div class="faq-answer"><p>
+              It uses the public USPS allocation of three-digit ZIP prefixes to
+              states, so any valid five-digit US ZIP resolves - roughly sixty
+              ranges instead of a list of forty thousand codes. Entering a ZIP in
+              a state with no program tells you exactly that, rather than showing
+              an empty result list.
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Is the legal status information current?</summary>
+            <div class="faq-answer"><p>
+              Treat it as a snapshot, not a source of truth. Cannabis law moves
+              quickly and licensing changes faster. Every state entry names the
+              responsible regulator precisely so you can confirm the current rule
+              before relying on it. This is not legal advice.
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Why do some states show no listings at all?</summary>
+            <div class="faq-answer"><p>
+              Because they have no legal retail dispensaries to list. States with
+              low-THC or CBD-only programs, and states with no program, appear in
+              the state grid with their status but carry no storefront listings.
+              Inventing listings there would be the dishonest option.
+            </p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="signup">
+      <div class="signup-grid shell">
+        <div>
+          <p class="eyebrow eyebrow--lav">06 / Stay posted</p>
+          <h2>New states<br>keep landing.</h2>
+          <p class="hero-copy">
+            Programs change every legislative session. This is where a real build
+            would send you a note when your state's status moves.
+          </p>
+        </div>
+
+        <form class="signup-form" id="signupForm" novalidate>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email"
+                   placeholder="you@example.com" aria-describedby="signupResult">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="signupZip">Your ZIP</label>
+              <input id="signupZip" name="signupZip" type="text" inputmode="numeric"
+                     autocomplete="postal-code" maxlength="5" placeholder="94607"
+                     aria-describedby="signupZipHelp signupResult">
+              <small id="signupZipHelp">Five digits, any US state.</small>
+            </div>
+            <div class="field">
+              <label for="signupState">State</label>
+              <input id="signupState" type="text" readonly placeholder="&mdash;" tabindex="-1">
+            </div>
+          </div>
+          <label class="check">
+            <input id="ageCheck" type="checkbox">
+            <span>I confirm I am 21 or older, and I understand this demo does not send or store my information.</span>
+          </label>
+          <button class="button" type="submit">Notify me <span aria-hidden="true">&rarr;</span></button>
+          <p class="form-result" id="signupResult" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <a class="logo" href="#top" aria-label="Fast Gas, home">
+            <svg class="logo-mark" aria-hidden="true" focusable="false"><use href="#bong"/></svg>
+            <span class="logo-word">FAST GAS<small>Directory</small></span>
+          </a>
+          <p class="footer-blurb">
+            A nationwide dispensary directory concept. Real geography, real
+            program statuses, clearly labelled sample listings.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Directory</h4>
+          <ul>
+            <li><a href="#directory">Search listings</a></li>
+            <li><a href="#states">Browse by state</a></li>
+            <li><a href="#how">How it works</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>The fine print</h4>
+          <ul>
+            <li><a href="#standards">Our standards</a></li>
+            <li><a href="#faq">Honest FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Compliance</h4>
+          <ul>
+            <li><a href="#standards">21+ only</a></li>
+            <li><a href="#faq">Not legal advice</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <p><strong>21+ only.</strong> Concept site. No sales, carts or payments. Not legal advice.</p>
+        <p>Program snapshot: <span id="asOf">&mdash;</span> &middot; Confirm with your state regulator.</p>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="detail" aria-labelledby="detailName">
+    <form method="dialog" class="dialog-head">
+      <div>
+        <h3 id="detailName">Listing</h3>
+        <p class="card-meta" id="detailAddress"></p>
+      </div>
+      <button class="dialog-close" type="submit" aria-label="Close details">&times;</button>
+    </form>
+    <div class="dialog-body" id="detailBody"></div>
+  </dialog>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

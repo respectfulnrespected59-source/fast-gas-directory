@@ -1,0 +1,37 @@
+# Render blueprint: Fast Gas nationwide dispensary directory.
+# A pure static site - no build step, no server, no secrets.
+services:
+  - type: web
+    name: fast-gas-directory
+    runtime: static
+    staticPublishPath: .
+    buildCommand: ""
+    pullRequestPreviewsEnabled: false
+    headers:
+      # No 'unsafe-inline' anywhere: every style and script is an external
+      # file, which is why the inline style attributes were removed.
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=(), payment=()"
+      - path: /*
+        name: Strict-Transport-Security
+        value: "max-age=31536000; includeSubDomains"
+      - path: /assets/*
+        name: Cache-Control
+        value: "public, max-age=3600"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

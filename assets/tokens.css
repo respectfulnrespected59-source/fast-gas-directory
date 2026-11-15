@@ -1,0 +1,102 @@
+/* ===========================================================================
+   FAST GAS - design tokens
+   Direction: dark-luxury ledger. Deep money-green canvas, gold as the
+   precious-metal accent (it glows on interaction, never sits flat), lavender
+   as the cool counterpoint, bone for editorial light breaks.
+   Colour carries meaning here, it is not decoration:
+     gold     -> adult-use, verified, premium
+     lavender -> medical / patient-only
+     green    -> open now, available, go
+   ========================================================================= */
+
+:root {
+  /* --- money green: the canvas and the "go" signal --- */
+  --money-900: #04170f;
+  --money-850: #061e14;
+  --money-800: #07271a;
+  --money-700: #0a3826;
+  --money-600: #0f5635;
+  --money-500: #138a4f;
+  --money:     #19c37d;
+  --money-300: #5be8a8;
+  --money-200: #a6f5d1;
+
+  /* --- gold: the metal --- */
+  --gold-700: #8a5f05;
+  --gold-600: #b8860b;
+  --gold-500: #e0a516;
+  --gold:     #ffc73a;
+  --gold-400: #ffd978;
+  --gold-200: #ffecb8;
+  --gold-100: #fff6dd;
+
+  /* --- lavender: the cool counterpoint --- */
+  --lav-800: #2f1d6b;
+  --lav-700: #4b2fa8;
+  --lav-600: #6b4bd4;
+  --lav:     #b49bff;
+  --lav-300: #d9ccff;
+  --lav-100: #efe8ff;
+
+  /* --- neutrals --- */
+  --ink:        #09140e;
+  --ink-soft:   #16261d;
+  --bone:       #fbf7ea;
+  --bone-dim:   #f1ebd9;
+  --paper:      #fffdf5;
+  --muted:      #6d7c73;
+  --muted-dark: #94a89f;
+  --line-dark:  rgba(255, 199, 58, 0.16);
+  --line-light: rgba(9, 20, 14, 0.14);
+
+  /* --- type --- */
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --mono: "Space Mono", ui-monospace, "Cascadia Mono", monospace;
+
+  --text-xs:   0.7rem;
+  --text-sm:   0.78rem;
+  --text-base: clamp(1rem, 0.95rem + 0.22vw, 1.08rem);
+  --text-lg:   clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  --text-h3:   clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+  --text-h2:   clamp(2.1rem, 1.5rem + 2.6vw, 3.9rem);
+  --text-hero: clamp(2.9rem, 1.6rem + 6.2vw, 7rem);
+
+  /* --- space / shape --- */
+  --space-section: clamp(4.5rem, 3rem + 5vw, 9rem);
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --radius-xl: 38px;
+
+  /* --- elevation + the gold glow (the signature interaction) --- */
+  --shadow-soft: 0 18px 48px rgba(4, 23, 15, 0.14);
+  --shadow-card: 0 22px 60px rgba(4, 23, 15, 0.45);
+  --glow-gold: 0 0 0 1px var(--gold-500), 0 0 22px rgba(255, 199, 58, 0.42),
+               0 18px 48px rgba(255, 199, 58, 0.14);
+  --glow-lav: 0 0 0 1px var(--lav-600), 0 0 22px rgba(180, 155, 255, 0.4);
+  --glow-money: 0 0 0 1px var(--money-500), 0 0 22px rgba(25, 195, 125, 0.4);
+
+  /* --- motion --- */
+  --dur-fast: 140ms;
+  --dur: 260ms;
+  --dur-slow: 520ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Honour the OS setting. No motion here is load-bearing for comprehension. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur: 1ms;
+    --dur-slow: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
