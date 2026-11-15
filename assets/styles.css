@@ -1227,3 +1227,15 @@ footer {
 .hero-key-row[data-program="cbd"]  i { background: var(--gold); }
 .hero-key-row[data-program="none"] i { background: var(--muted); }
 .hero-key-row[data-program="none"] b { color: var(--muted-dark); }
+
+/* --- coverage signalling ------------------------------------------------ */
+/* A verified state gets a gold edge: the tile is making a claim backed by a
+   named government register, and should look different from one that is not. */
+.state-tile--covered {
+  border-color: var(--gold-600);
+  background: linear-gradient(165deg, rgba(255, 199, 58, 0.1), rgba(6, 30, 20, 0.8));
+}
+.state-tile--covered small { color: var(--gold); }
+
+.detail-actions { gap: 10px; }
+.detail-actions .button { text-transform: none; letter-spacing: 0.04em; }

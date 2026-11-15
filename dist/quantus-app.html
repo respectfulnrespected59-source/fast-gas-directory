@@ -6,8 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
-  <title>Fast Gas - Nationwide Dispensary Directory</title>
-  <meta name="description" content="Fast Gas is a nationwide cannabis dispensary directory concept: search any US ZIP code, see your state's program status, and browse sample listings across all 50 states. 21+. No sales are processed.">
+  <title>Fast Gas - Licensed Dispensary Directory</title>
+  <meta name="description" content="Fast Gas lists currently-licensed US cannabis retailers taken from state regulators' public licence registers. Search any ZIP code. No ratings, hours or prices are invented. 21+.">
   <meta name="theme-color" content="#04170f">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1348,6 +1348,18 @@ footer {
 .hero-key-row[data-program="none"] i { background: var(--muted); }
 .hero-key-row[data-program="none"] b { color: var(--muted-dark); }
 
+/* --- coverage signalling ------------------------------------------------ */
+/* A verified state gets a gold edge: the tile is making a claim backed by a
+   named government register, and should look different from one that is not. */
+.state-tile--covered {
+  border-color: var(--gold-600);
+  background: linear-gradient(165deg, rgba(255, 199, 58, 0.1), rgba(6, 30, 20, 0.8));
+}
+.state-tile--covered small { color: var(--gold); }
+
+.detail-actions { gap: 10px; }
+.detail-actions .button { text-transform: none; letter-spacing: 0.04em; }
+
   </style>
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff0c2%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22.42%22%20stop-color%3D%22%23ffc73a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23b8860b%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%2304170f%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M20%206.2C20%204%2023.4%204.4%2023.4%202.4%2023.4%201.1%2021.9.7%2020.8%201.3%22%20fill%3D%22none%22%20stroke%3D%22%23b49bff%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M13.2%207H26.8L23.2%2012.8V24.5L31.8%2040.6Q33.2%2043.4%2030.2%2043.4H9.8Q6.8%2043.4%208.2%2040.6L16.8%2024.5V12.8Z%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M12.26%2033H27.74L31.8%2040.6Q33.2%2043.4%2030.2%2043.4H9.8Q6.8%2043.4%208.2%2040.6Z%22%20fill%3D%22%2319c37d%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M22.5%2034.5%2033.5%2023%22%20fill%3D%22none%22%20stroke%3D%22url(%23g)%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M31.83%2022.19%2035.46%2016.68%2039.92%2020.96%2034.57%2024.81Z%22%20fill%3D%22url(%23g)%22%2F%3E%0A%3C%2Fsvg%3E%0A" type="image/svg+xml">
 </head>
@@ -1418,7 +1430,7 @@ footer {
 
   <div class="topbar">
     <strong>21+ only</strong> &nbsp;/&nbsp; Nationwide directory concept &nbsp;/&nbsp;
-    <em>No sales, carts or payments on this site</em>
+    <em>Licence data from state regulators &middot; no sales on this site</em>
   </div>
 
   <header>
@@ -1450,21 +1462,22 @@ footer {
           <p class="hero-kicker"><span class="pulse" aria-hidden="true"></span> All 50 states &middot; 21+ &middot; Updated snapshot</p>
           <h1>Every state.<span class="tint-gold">Every legal</span><span class="tint-lav">storefront.</span></h1>
           <p class="hero-copy">
-            Fast Gas is a nationwide dispensary directory. Drop in any US ZIP
-            code and it tells you the state program that applies, what that
-            legally permits, and which listings nearby match what you need.
+            Every retailer here holds a current licence, taken straight from
+            state regulators' public registers. Drop in any US ZIP code and it
+            tells you the programme that applies and the nearest licensed doors.
           </p>
           <p class="hero-note">
-            Design concept. State program statuses are a snapshot and change
-            often - always confirm with your state regulator. Listings are
-            clearly labelled sample data; no live inventory, ordering or payment.
+            No ratings, opening hours or prices appear anywhere on this site,
+            because regulators do not publish them and we will not invent them.
+            Call ahead. Coverage is state by state and each state names its
+            source; states we have not verified show nothing rather than guesses.
           </p>
         </div>
 
         <div class="hero-side">
           <div class="console">
           <h2>Search the directory.</h2>
-          <p class="console-sub">ZIP code, city or state - all 50 states resolve.</p>
+          <p class="console-sub">ZIP, city, state, retailer name or licence number.</p>
 
           <form id="heroForm" novalidate>
             <div class="search-row">
@@ -1479,10 +1492,10 @@ footer {
             </div>
             <p class="console-hint">
               Try
-              <button type="button" data-example="94607">94607</button>,
-              <button type="button" data-example="10011">10011</button>,
-              <button type="button" data-example="Denver">Denver</button> or
-              <button type="button" data-example="Oklahoma">Oklahoma</button>.
+              <button type="button" data-example="94541">94541</button>,
+              <button type="button" data-example="Hayward">Hayward</button>,
+              <button type="button" data-example="Union City">Union City</button> or
+              <button type="button" data-example="Redwood City">Redwood City</button>.
             </p>
             <p class="form-result" id="heroResult" role="status" aria-live="polite"></p>
           </form>
@@ -1495,9 +1508,9 @@ footer {
 
     <div class="stat-strip">
       <div class="stats shell" id="statStrip">
-        <div class="stat"><b id="statListings">&mdash;</b><span>Sample listings</span></div>
-        <div class="stat"><b id="statStates">&mdash;</b><span>States with listings</span></div>
-        <div class="stat"><b id="statMetros">&mdash;</b><span>Metro areas</span></div>
+        <div class="stat"><b id="statListings">&mdash;</b><span>Licensed retailers</span></div>
+        <div class="stat"><b id="statStates">&mdash;</b><span>States verified</span></div>
+        <div class="stat"><b id="statMetros">&mdash;</b><span>Cities covered</span></div>
         <div class="stat"><b id="statRec">&mdash;</b><span>Adult-use states</span></div>
       </div>
     </div>
@@ -1530,10 +1543,10 @@ footer {
             <div class="select-wrap">
               <label class="sr-only" for="sort">Sort results</label>
               <select id="sort">
-                <option value="relevance">Sort: best match (open + nearest)</option>
+                <option value="relevance">Sort: best match (nearest)</option>
                 <option value="distance">Sort: nearest</option>
-                <option value="rating">Sort: highest rated</option>
                 <option value="name">Sort: A to Z</option>
+                <option value="city">Sort: by city</option>
               </select>
             </div>
           </div>
@@ -1542,10 +1555,8 @@ footer {
             <button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="chip-count" data-count="all">0</span></button>
             <button class="chip" type="button" data-filter="rec" aria-pressed="false">Adult-use <span class="chip-count" data-count="rec">0</span></button>
             <button class="chip" type="button" data-filter="med" aria-pressed="false">Medical <span class="chip-count" data-count="med">0</span></button>
-            <button class="chip" type="button" data-filter="delivery" aria-pressed="false">Delivery <span class="chip-count" data-count="delivery">0</span></button>
-            <button class="chip" type="button" data-filter="open" aria-pressed="false">Open now <span class="chip-count" data-count="open">0</span></button>
-            <button class="chip" type="button" data-filter="verified" aria-pressed="false">Verified <span class="chip-count" data-count="verified">0</span></button>
-            <button class="chip" type="button" data-filter="ada" aria-pressed="false">ADA access <span class="chip-count" data-count="ada">0</span></button>
+            <button class="chip" type="button" data-filter="storefront" aria-pressed="false">Storefront <span class="chip-count" data-count="storefront">0</span></button>
+            <button class="chip" type="button" data-filter="delivery" aria-pressed="false">Delivery only <span class="chip-count" data-count="delivery">0</span></button>
           </div>
         </div>
 
@@ -1589,12 +1600,12 @@ footer {
         <div class="section-heading">
           <div>
             <p class="eyebrow eyebrow--lav">02 / Coast to coast</p>
-            <h2>All 50 states,<br>plus D.C.</h2>
+            <h2>Coverage,<br>state by state.</h2>
           </div>
           <p>
-            Programs differ state by state, and a directory that pretends
-            otherwise is useless. Pick a state to filter the listings above and
-            read what its program actually permits.
+            Green tiles are verified against that state's regulator. The rest
+            show their programme status but carry no listings yet - we would
+            rather show a gap than fill it with guesses.
           </p>
         </div>
 
@@ -1657,23 +1668,22 @@ footer {
         <div class="section-heading">
           <div>
             <p class="eyebrow">04 / Clear by design</p>
-            <h2>What this is.<br>What it is not.</h2>
+            <h2>Where every<br>listing comes from.</h2>
           </div>
           <p>
-            There are no invented ratings on real businesses, no press quotes
-            and no borrowed customer claims. Trust starts with saying plainly
-            what you are looking at.
+            A directory is only worth the accuracy of its worst entry. These are
+            the rules that keep every row checkable against a government register.
           </p>
         </div>
 
         <div class="standards">
           <article class="standard">
             <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-eye"/></svg></div>
-            <h3>Sample listings, labelled</h3>
+            <h3>Real licences, named sources</h3>
             <p>
-              Business names in this directory are fictional and generated.
-              Cities, ZIP codes and state programs are real. Nothing here claims
-              to describe an actual storefront.
+              Every retailer is a currently-active licence pulled from a state
+              regulator's public register. Each state card names its source and
+              the date it was refreshed, so you can check any entry at source.
             </p>
           </article>
           <article class="standard">
@@ -1696,11 +1706,11 @@ footer {
           </article>
           <article class="standard">
             <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div>
-            <h3>Nothing leaves your browser</h3>
+            <h3>No invented signals</h3>
             <p>
-              There is no cart, no checkout and no backend. Searches and filters
-              run locally; the forms validate and then tell you plainly that
-              nothing was sent or stored.
+              You will find no star ratings, opening hours or prices here.
+              Regulators do not publish them, and inventing them about a named
+              business would misdirect you to a closed or wrong door. Call ahead.
             </p>
           </article>
         </div>
@@ -1721,46 +1731,54 @@ footer {
           <details class="faq-item">
             <summary>Are these real dispensaries?</summary>
             <div class="faq-answer"><p>
-              No. Every business name is fictional and deterministically
-              generated, so the directory can demonstrate real search, filtering
-              and distance behaviour without putting words in a real company's
-              mouth. The cities, ZIP codes and state program statuses are real.
+              Yes. Every listing is a currently-active retail licence taken from a
+              state regulator's public register, with the licence number shown on
+              the card so you can verify it at source. An earlier version of this
+              site used generated sample listings; that data has been removed
+              entirely.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>Can I order from this site?</summary>
+            <summary>Why are there no ratings, hours or prices?</summary>
             <div class="faq-answer"><p>
-              No. There is no cart, checkout, payment processor or backend of any
-              kind. The forms validate your input and then confirm that nothing
-              was transmitted or stored.
+              Because regulators do not publish them. A star rating invented about
+              a named real business is defamatory, and an invented opening time
+              sends you to a locked door. Where we do not have a fact, we show
+              nothing and tell you to call ahead.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>How does the ZIP lookup cover all 50 states?</summary>
+            <summary>Which states are covered?</summary>
             <div class="faq-answer"><p>
-              It uses the public USPS allocation of three-digit ZIP prefixes to
-              states, so any valid five-digit US ZIP resolves - roughly sixty
-              ranges instead of a list of forty thousand codes. Entering a ZIP in
-              a state with no program tells you exactly that, rather than showing
-              an empty result list.
+              Only the states listed in the coverage panel at the top. Each state
+              regulator publishes its register differently - some offer a daily
+              API, some a downloadable file, some only a search page - so states
+              are added one verified source at a time. An uncovered state says so
+              plainly instead of showing an empty list you might read as "none here".
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Does an active licence mean the shop is open?</summary>
+            <div class="faq-answer"><p>
+              No. It means the state lists the licence as active on the refresh
+              date shown. A business can hold a licence while closed for
+              refurbishment, between premises, or not yet trading. Always call.
             </p></div>
           </details>
           <details class="faq-item">
             <summary>Is the legal status information current?</summary>
             <div class="faq-answer"><p>
-              Treat it as a snapshot, not a source of truth. Cannabis law moves
-              quickly and licensing changes faster. Every state entry names the
-              responsible regulator precisely so you can confirm the current rule
-              before relying on it. This is not legal advice.
+              Treat programme status as a snapshot, not a source of truth. Cannabis
+              law moves quickly. Every state entry names its regulator so you can
+              confirm before relying on it. This is not legal advice.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>Why do some states show no listings at all?</summary>
+            <summary>Can I order from this site?</summary>
             <div class="faq-answer"><p>
-              Because they have no legal retail dispensaries to list. States with
-              low-THC or CBD-only programs, and states with no program, appear in
-              the state grid with their status but carry no storefront listings.
-              Inventing listings there would be the dishonest option.
+              No. There is no cart, checkout or payment of any kind. The directory
+              points you at a licensed door; everything after that happens between
+              you and the retailer.
             </p></div>
           </details>
         </div>
@@ -1817,8 +1835,8 @@ footer {
             <span class="logo-word">FAST GAS<small>Directory</small></span>
           </a>
           <p class="footer-blurb">
-            A nationwide dispensary directory concept. Real geography, real
-            program statuses, clearly labelled sample listings.
+            Licensed US cannabis retailers, straight from state regulators'
+            public registers. No invented ratings, hours or prices.
           </p>
         </div>
         <div class="footer-col">
@@ -1846,8 +1864,8 @@ footer {
       </div>
 
       <div class="footer-legal">
-        <p><strong>21+ only.</strong> Concept site. No sales, carts or payments. Not legal advice.</p>
-        <p>Program snapshot: <span id="asOf">&mdash;</span> &middot; Confirm with your state regulator.</p>
+        <p><strong>21+ only.</strong> No sales or payments. Licence data is public record. Not legal advice.</p>
+        <p>Licence data refreshed: <span id="asOf">&mdash;</span> &middot; Confirm with your state regulator.</p>
       </div>
     </div>
   </footer>
@@ -1866,27 +1884,31 @@ footer {
   <script>
 (() => {
 /*
- * FAST GAS - nationwide dispensary directory data layer.
+ * FAST GAS - data layer.
  *
- * Three kinds of data live here, and the difference matters:
+ * EVERYTHING HERE IS FACTUAL. There is no generated, sample or placeholder
+ * business data anywhere in this file or in what it loads. An earlier version
+ * of this app shipped invented listings; that was wrong for a directory, whose
+ * entire job is to send a real person to a real door.
  *
- *   1. ZIP3_RANGES   - real, public USPS ZIP-prefix-to-state allocations.
- *   2. STATES        - a cannabis-program status SNAPSHOT. Laws change; every
- *                      surface that renders this must carry the "confirm with
- *                      your state regulator" caveat. Never legal advice.
- *   3. METROS/LISTINGS - SAMPLE listings. Real cities, real ZIPs, FICTIONAL
- *                      businesses, generated deterministically from a seed.
- *                      Never fabricate a real dispensary's name or phone number.
+ * Three kinds of fact:
  *
- * Swapping in a live feed means replacing buildListings() only. Everything
- * downstream reads the shape it returns.
+ *   1. ZIP3_RANGES - public USPS ZIP-prefix-to-state allocation.
+ *   2. STATES      - cannabis programme status per state. A snapshot with a
+ *                    named regulator; laws change, so every surface that
+ *                    renders it carries the "confirm with your regulator"
+ *                    caveat. Not legal advice.
+ *   3. COVERAGE    - which states we hold real licensed-retailer data for,
+ *                    where it came from, and when. States not listed here
+ *                    report "not yet covered" rather than showing nothing and
+ *                    letting you assume there is nothing there.
+ *
+ * Retailer records come from state regulators' public licence registers and
+ * are fetched by the scripts in tools/. They carry NO ratings, opening hours
+ * or prices, because regulators do not publish those and inventing them about
+ * a named real business is not acceptable.
  */
 
-const DATA_AS_OF = "November 2026";
-
-/* ---------------------------------------------------------------------------
- * 1. ZIP prefix -> state. Public USPS allocation: [lowPrefix, highPrefix, state].
- * ------------------------------------------------------------------------- */
 const ZIP3_RANGES = [
   [  5,   5, "NY"], [  6,   9, "PR"], [ 10,  27, "MA"], [ 28,  29, "RI"],
   [ 30,  38, "NH"], [ 39,  49, "ME"], [ 50,  59, "VT"], [ 60,  69, "CT"],
@@ -1913,13 +1935,6 @@ function stateFromZip(zip) {
   return null;
 }
 
-/* ---------------------------------------------------------------------------
- * 2. State program snapshot.
- *    program: "rec"  adult-use + medical
- *             "med"  medical patients only
- *             "cbd"  low-THC / CBD only
- *             "none" no public state program
- * ------------------------------------------------------------------------- */
 const STATES = [
   { code: "AL", name: "Alabama",          program: "med",  regulator: "Alabama Medical Cannabis Commission" },
   { code: "AK", name: "Alaska",           program: "rec",  regulator: "Alaska Alcohol & Marijuana Control Office" },
@@ -1983,187 +1998,64 @@ const PROGRAM_LABELS = {
   none: { short: "No program", long: "No public state program", tone: "muted" },
 };
 
-/* ---------------------------------------------------------------------------
- * 3. Metros. Real cities / coordinates / ZIPs - the anchors sample listings
- *    hang off of. Only adult-use and medical states carry listings.
- * ------------------------------------------------------------------------- */
-const METROS = [
-  { city: "Los Angeles",      state: "CA", lat: 34.052, lng: -118.244, zips: ["90012", "90026", "90028", "90046", "90291"], count: 6 },
-  { city: "San Francisco",    state: "CA", lat: 37.775, lng: -122.419, zips: ["94102", "94103", "94110", "94117", "94122"], count: 5 },
-  { city: "Oakland",          state: "CA", lat: 37.804, lng: -122.271, zips: ["94601", "94607", "94609", "94612"], count: 4 },
-  { city: "San Diego",        state: "CA", lat: 32.716, lng: -117.161, zips: ["92101", "92104", "92109"], count: 4 },
-  { city: "Sacramento",       state: "CA", lat: 38.582, lng: -121.494, zips: ["95814", "95816", "95818"], count: 3 },
-  { city: "Denver",           state: "CO", lat: 39.739, lng: -104.990, zips: ["80202", "80205", "80211", "80218"], count: 5 },
-  { city: "Colorado Springs", state: "CO", lat: 38.834, lng: -104.821, zips: ["80903", "80905"], count: 3 },
-  { city: "Portland",         state: "OR", lat: 45.512, lng: -122.658, zips: ["97201", "97209", "97214", "97232"], count: 5 },
-  { city: "Eugene",           state: "OR", lat: 44.052, lng: -123.087, zips: ["97401", "97402"], count: 3 },
-  { city: "Seattle",          state: "WA", lat: 47.606, lng: -122.332, zips: ["98101", "98104", "98122", "98133"], count: 5 },
-  { city: "Spokane",          state: "WA", lat: 47.659, lng: -117.425, zips: ["99201", "99202"], count: 3 },
-  { city: "Las Vegas",        state: "NV", lat: 36.170, lng: -115.140, zips: ["89101", "89109", "89119", "89146"], count: 5 },
-  { city: "Reno",             state: "NV", lat: 39.530, lng: -119.814, zips: ["89501", "89502"], count: 3 },
-  { city: "Phoenix",          state: "AZ", lat: 33.448, lng: -112.074, zips: ["85003", "85006", "85012", "85016"], count: 5 },
-  { city: "Mesa",             state: "AZ", lat: 33.415, lng: -111.831, zips: ["85201", "85210"], count: 2 },
-  { city: "Tucson",           state: "AZ", lat: 32.222, lng: -110.974, zips: ["85701", "85705"], count: 3 },
-  { city: "Chicago",          state: "IL", lat: 41.878, lng:  -87.630, zips: ["60601", "60607", "60614", "60622", "60647"], count: 6 },
-  { city: "Detroit",          state: "MI", lat: 42.331, lng:  -83.046, zips: ["48201", "48207", "48226"], count: 4 },
-  { city: "Ann Arbor",        state: "MI", lat: 42.281, lng:  -83.743, zips: ["48103", "48104"], count: 3 },
-  { city: "Boston",           state: "MA", lat: 42.360, lng:  -71.059, zips: ["02108", "02116", "02118", "02130"], count: 4 },
-  { city: "New York",         state: "NY", lat: 40.713, lng:  -74.006, zips: ["10001", "10011", "10013", "10019"], count: 6 },
-  { city: "Brooklyn",         state: "NY", lat: 40.678, lng:  -73.944, zips: ["11201", "11216", "11222"], count: 4 },
-  { city: "Newark",           state: "NJ", lat: 40.736, lng:  -74.172, zips: ["07102", "07103"], count: 3 },
-  { city: "Jersey City",      state: "NJ", lat: 40.728, lng:  -74.078, zips: ["07302", "07306"], count: 3 },
-  { city: "Baltimore",        state: "MD", lat: 39.290, lng:  -76.612, zips: ["21201", "21211", "21230"], count: 4 },
-  { city: "Washington",       state: "DC", lat: 38.907, lng:  -77.037, zips: ["20001", "20009", "20010"], count: 3 },
-  { city: "Minneapolis",      state: "MN", lat: 44.978, lng:  -93.265, zips: ["55401", "55408", "55414"], count: 3 },
-  { city: "St. Louis",        state: "MO", lat: 38.627, lng:  -90.200, zips: ["63101", "63110", "63118"], count: 4 },
-  { city: "Kansas City",      state: "MO", lat: 39.100, lng:  -94.579, zips: ["64108", "64111"], count: 3 },
-  { city: "Columbus",         state: "OH", lat: 39.961, lng:  -82.999, zips: ["43201", "43206", "43215"], count: 4 },
-  { city: "Cleveland",        state: "OH", lat: 41.505, lng:  -81.681, zips: ["44113", "44114"], count: 3 },
-  { city: "Albuquerque",      state: "NM", lat: 35.085, lng: -106.651, zips: ["87102", "87106", "87110"], count: 4 },
-  { city: "Hartford",         state: "CT", lat: 41.764, lng:  -72.685, zips: ["06103", "06106"], count: 3 },
-  { city: "Providence",       state: "RI", lat: 41.824, lng:  -71.413, zips: ["02903", "02906"], count: 2 },
-  { city: "Portland",         state: "ME", lat: 43.661, lng:  -70.255, zips: ["04101", "04102"], count: 3 },
-  { city: "Burlington",       state: "VT", lat: 44.476, lng:  -73.212, zips: ["05401", "05403"], count: 2 },
-  { city: "Anchorage",        state: "AK", lat: 61.218, lng: -149.900, zips: ["99501", "99503"], count: 3 },
-  { city: "Billings",         state: "MT", lat: 45.783, lng: -108.501, zips: ["59101", "59102"], count: 2 },
-  { city: "Richmond",         state: "VA", lat: 37.541, lng:  -77.436, zips: ["23219", "23220"], count: 2 },
-  { city: "Wilmington",       state: "DE", lat: 39.746, lng:  -75.547, zips: ["19801", "19806"], count: 2 },
-  { city: "Miami",            state: "FL", lat: 25.762, lng:  -80.192, zips: ["33101", "33127", "33139"], count: 4 },
-  { city: "Orlando",          state: "FL", lat: 28.538, lng:  -81.379, zips: ["32801", "32803"], count: 3 },
-  { city: "Tampa",            state: "FL", lat: 27.951, lng:  -82.457, zips: ["33602", "33606"], count: 3 },
-  { city: "Oklahoma City",    state: "OK", lat: 35.468, lng:  -97.521, zips: ["73102", "73106"], count: 4 },
-  { city: "Tulsa",            state: "OK", lat: 36.154, lng:  -95.993, zips: ["74103", "74104"], count: 3 },
-  { city: "Philadelphia",     state: "PA", lat: 39.953, lng:  -75.165, zips: ["19102", "19123", "19147"], count: 4 },
-  { city: "Pittsburgh",       state: "PA", lat: 40.441, lng:  -79.996, zips: ["15213", "15222"], count: 3 },
-  { city: "New Orleans",      state: "LA", lat: 29.951, lng:  -90.072, zips: ["70112", "70130"], count: 2 },
-  { city: "Little Rock",      state: "AR", lat: 34.747, lng:  -92.290, zips: ["72201", "72202"], count: 2 },
-  { city: "Salt Lake City",   state: "UT", lat: 40.761, lng: -111.891, zips: ["84101", "84111"], count: 2 },
-  { city: "Honolulu",         state: "HI", lat: 21.307, lng: -157.858, zips: ["96813", "96815"], count: 2 },
-  { city: "Jackson",          state: "MS", lat: 32.299, lng:  -90.185, zips: ["39201", "39202"], count: 2 },
-  { city: "Birmingham",       state: "AL", lat: 33.521, lng:  -86.802, zips: ["35203", "35205"], count: 2 },
-  { city: "Louisville",       state: "KY", lat: 38.253, lng:  -85.758, zips: ["40202", "40204"], count: 2 },
-  { city: "Charleston",       state: "WV", lat: 38.350, lng:  -81.633, zips: ["25301", "25302"], count: 2 },
-  { city: "Manchester",       state: "NH", lat: 42.996, lng:  -71.455, zips: ["03101", "03104"], count: 2 },
-  { city: "Fargo",            state: "ND", lat: 46.877, lng:  -96.790, zips: ["58102", "58103"], count: 2 },
-  { city: "Sioux Falls",      state: "SD", lat: 43.550, lng:  -96.701, zips: ["57104", "57105"], count: 2 },
-  { city: "Omaha",            state: "NE", lat: 41.257, lng:  -95.934, zips: ["68102", "68105"], count: 2 },
+const ACCESS_LABELS = {
+  rec: "Adult-use 21+",
+  med: "Medical patients only",
+  both: "Adult-use + medical",
+};
+
+/*
+ * States we hold verified retailer data for. Adding a state means writing a
+ * fetcher in tools/, dropping its JSON in assets/data/, and adding one row
+ * here. Nothing else in the app changes.
+ */
+const COVERAGE = [
+  {
+    state: "CA",
+    file: "assets/data/ca.json",
+    source: "California Dept. of Cannabis Control",
+    sourceUrl: "https://search.cannabis.ca.gov/",
+  },
 ];
 
-/* ---------------------------------------------------------------------------
- * Deterministic sample-listing generator.
- * mulberry32 keeps every reload identical, so a shared link shows the same
- * results to whoever opens it next.
- * ------------------------------------------------------------------------- */
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return function () {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+const COVERED_STATES = new Set(COVERAGE.map((c) => c.state));
 
-const FIRST = [
-  "Golden Hour", "Verdant", "Lavender Lane", "High Noon", "Emerald Index",
-  "Gilded Leaf", "Northstar", "Quiet Giant", "Green Sovereign", "Amber Room",
-  "Violet Hour", "Low Key", "Field Notes", "Honest Gram", "Sun Grown",
-  "Cold Press", "Terrace", "Mother Tongue", "Bright Side", "Common Good",
-  "Third Coast", "Paper Crane", "Slow Burn", "Future Leaf", "Civic",
-  "Lantern", "Salt & Soil", "Open Window", "Hazel & Gold", "Steady Hand",
-];
-const SECOND = [
-  "Collective", "Dispensary", "Cannabis Co.", "Provisions", "Apothecary",
-  "Society", "Supply", "Botanica", "Rooms", "Market",
-];
-const STREETS = [
-  "Market St", "Oak Ave", "Cedar Blvd", "Mission St", "Union Ave", "Grand Blvd",
-  "Franklin St", "Highland Ave", "Bay St", "Lincoln Way", "Alder St", "Jasper Ln",
-];
-const SERVICE_POOL = [
-  "Delivery", "Curbside", "In-store pickup", "ADA accessible", "Walk-ins",
-  "Online order", "Veteran discount", "First-time deal", "Cash + debit", "Lounge on site",
-];
-const CATEGORY_POOL = [
-  "Flower", "Pre-rolls", "Edibles", "Vapes", "Concentrates", "Topicals",
-  "Tinctures", "Seeds", "Beverages",
-];
+/**
+ * Load every covered state's register.
+ * A state whose file fails to load is reported, never silently treated as
+ * empty - "no listings" and "we could not load the listings" are different
+ * answers and must not look alike.
+ */
+async function loadListings() {
+  const listings = [];
+  const sources = [];
+  const errors = [];
 
-function pick(rand, list) {
-  return list[Math.floor(rand() * list.length)];
-}
-
-function pickSome(rand, list, n) {
-  const copy = [...list];
-  const out = [];
-  for (let i = 0; i < n && copy.length; i += 1) {
-    out.push(copy.splice(Math.floor(rand() * copy.length), 1)[0]);
-  }
-  return out;
-}
-
-/** Hours in minutes-from-midnight, so "open now" is a real comparison. */
-function makeHours(rand) {
-  return {
-    open: [8, 9, 10, 11][Math.floor(rand() * 4)] * 60,
-    close: [19, 20, 21, 22, 23][Math.floor(rand() * 5)] * 60,
-  };
-}
-
-function buildListings() {
-  const out = [];
-  let id = 0;
-
-  METROS.forEach((metro, metroIndex) => {
-    const state = STATE_BY_CODE[metro.state];
-    if (!state || state.program === "none" || state.program === "cbd") return;
-
-    const rand = mulberry32(0x9e37 + metroIndex * 7919);
-    const used = new Set();
-
-    for (let i = 0; i < metro.count; i += 1) {
-      let name = pick(rand, FIRST) + " " + pick(rand, SECOND);
-      let guard = 0;
-      while (used.has(name) && guard < 30) {
-        name = pick(rand, FIRST) + " " + pick(rand, SECOND);
-        guard += 1;
+  await Promise.all(
+    COVERAGE.map(async (entry) => {
+      try {
+        const res = await fetch(entry.file, { cache: "no-cache" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const body = await res.json();
+        listings.push(...body.listings);
+        sources.push({
+          state: entry.state,
+          source: body.source || entry.source,
+          sourceUrl: entry.sourceUrl,
+          refreshed: (body.dataRefreshedDate || body.fetchedAt || "").slice(0, 10),
+          count: body.count ?? body.listings.length,
+          addressWithheldCount: body.addressWithheldCount || 0,
+        });
+      } catch (cause) {
+        errors.push({ state: entry.state, message: String(cause.message || cause) });
       }
-      used.add(name);
+    })
+  );
 
-      const services = pickSome(rand, SERVICE_POOL, 3 + Math.floor(rand() * 3));
-      // A medical-only state cannot host adult-use walk-in retail.
-      const access = state.program === "rec" ? (rand() > 0.72 ? "both" : "rec") : "med";
-
-      id += 1;
-      out.push({
-        id: "fg-" + String(id).padStart(4, "0"),
-        name,
-        city: metro.city,
-        state: metro.state,
-        stateName: state.name,
-        zip: pick(rand, metro.zips),
-        street: 100 + Math.floor(rand() * 4800) + " " + pick(rand, STREETS),
-        lat: metro.lat + (rand() - 0.5) * 0.14,
-        lng: metro.lng + (rand() - 0.5) * 0.14,
-        rating: Math.round((3.8 + rand() * 1.2) * 10) / 10,
-        reviews: 40 + Math.floor(rand() * 900),
-        access,
-        program: state.program,
-        hours: makeHours(rand),
-        services,
-        categories: pickSome(rand, CATEGORY_POOL, 4 + Math.floor(rand() * 4)),
-        priceTier: ["$", "$$", "$$$"][Math.floor(rand() * 3)],
-        delivery: services.includes("Delivery"),
-        verified: rand() > 0.45,
-      });
-    }
-  });
-
-  return out;
+  return { listings, sources, errors };
 }
 
-/** Great-circle miles, for the "N mi away" line after a ZIP or city search. */
+/** Great-circle miles. */
 function haversineMiles(a, b) {
   const toRad = (d) => (d * Math.PI) / 180;
   const dLat = toRad(b.lat - a.lat);
@@ -2176,46 +2068,79 @@ function haversineMiles(a, b) {
   return 7917.5 * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
-/** Nearest anchor for a ZIP: exact ZIP match first, then first metro in state. */
-function anchorForZip(zip) {
-  const exact = METROS.find((m) => m.zips.includes(zip));
-  if (exact) return exact;
-  const state = stateFromZip(zip);
-  if (!state) return null;
-  const inState = METROS.filter((m) => m.state === state);
-  return inState.length ? inState[0] : null;
+function centroid(items) {
+  const placed = items.filter((l) => l.lat !== null && l.lng !== null);
+  if (!placed.length) return null;
+  const lat = placed.reduce((sum, l) => sum + l.lat, 0) / placed.length;
+  const lng = placed.reduce((sum, l) => sum + l.lng, 0) / placed.length;
+  return { lat, lng };
+}
+
+/**
+ * Turn a ZIP into a point to measure distance from.
+ *
+ * Derived from the real retailer coordinates we already hold rather than from
+ * a table of invented city centres: exact ZIP first, then the surrounding ZIP3
+ * area, then the state. Returns null when we have nothing real to anchor on,
+ * which the UI reports rather than guessing.
+ */
+function anchorForZip(zip, listings) {
+  if (!/^\d{5}$/.test(zip)) return null;
+
+  const exact = centroid(listings.filter((l) => l.zip === zip));
+  if (exact) return { ...exact, precision: "zip" };
+
+  const prefix = zip.slice(0, 3);
+  const near = centroid(listings.filter((l) => l.zip.startsWith(prefix)));
+  if (near) return { ...near, precision: "area" };
+
+  const code = stateFromZip(zip);
+  const inState = centroid(listings.filter((l) => l.state === code));
+  if (inState) return { ...inState, precision: "state" };
+
+  return null;
+}
+
+/** Anchor for a named city, from that city's own retailers. */
+function anchorForCity(city, listings) {
+  const lower = city.trim().toLowerCase();
+  const hit = centroid(listings.filter((l) => l.city.toLowerCase() === lower));
+  return hit ? { ...hit, precision: "city" } : null;
 }
 
 /*
  * FAST GAS - directory behaviour.
  *
- * One state object drives every surface. Any mutation goes through update(),
- * which re-derives the visible set and repaints. No component owns its own
- * copy of the truth, so the result count, chip counts, legality panel and
- * grid cannot disagree with each other.
+ * One state object drives every surface; all mutation goes through update().
+ *
+ * What a listing does and does NOT carry is the important thing here. Every
+ * record is a real, currently-active retail licence from a state regulator, so
+ * it has a name, an address, coordinates, a licence number and an expiry. It
+ * has no rating, no opening hours and no prices, because regulators do not
+ * publish those. The UI must never imply otherwise: an invented star rating
+ * libels a real business and an invented opening time sends someone to a
+ * locked door.
  */
 
 
-const LISTINGS = buildListings();
 const PAGE_SIZE = 24;
 
-/* --- state --------------------------------------------------------------- */
+let LISTINGS = [];
+let SOURCES = [];
+let LOAD_ERRORS = [];
+
 const state = {
   query: "",
-  filters: new Set(),   // "rec" | "med" | "delivery" | "open" | "verified" | "ada"
+  filters: new Set(), // "rec" | "med" | "storefront" | "delivery"
   sort: "relevance",
-  stateCode: null,      // set by a state tile or a resolved search
-  anchor: null,         // { city, state, lat, lng } for distance sorting
+  stateCode: null,
+  anchor: null,
   limit: PAGE_SIZE,
 };
 
-/* --- tiny DOM helpers ---------------------------------------------------- */
+/* --- helpers ------------------------------------------------------------- */
 const $ = (id) => document.getElementById(id);
 
-/**
- * Build an element. Text always goes through textContent, never innerHTML,
- * so a listing name could never be interpreted as markup.
- */
 function el(tag, props = {}, children = []) {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(props)) {
@@ -2232,28 +2157,8 @@ function el(tag, props = {}, children = []) {
   return node;
 }
 
-/* --- formatting ---------------------------------------------------------- */
-function formatTime(minutes) {
-  const h24 = Math.floor(minutes / 60);
-  const mm = String(minutes % 60).padStart(2, "0");
-  const suffix = h24 >= 12 ? "PM" : "AM";
-  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
-  return h12 + ":" + mm + " " + suffix;
-}
-
-/** Minutes since local midnight - the basis for "open now". */
-function nowMinutes() {
-  const now = new Date();
-  return now.getHours() * 60 + now.getMinutes();
-}
-
-function isOpenNow(listing) {
-  const t = nowMinutes();
-  return t >= listing.hours.open && t < listing.hours.close;
-}
-
 function milesFromAnchor(listing) {
-  if (!state.anchor) return null;
+  if (!state.anchor || listing.lat === null || listing.lng === null) return null;
   return haversineMiles(state.anchor, listing);
 }
 
@@ -2262,29 +2167,43 @@ function formatMiles(miles) {
   return miles < 10 ? miles.toFixed(1) + " mi" : Math.round(miles) + " mi";
 }
 
+/** (323) 645-7669 -> tel:+13236457669 */
+function telHref(phone) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  if (digits.length === 10) return "tel:+1" + digits;
+  if (digits.length === 11 && digits.startsWith("1")) return "tel:+" + digits;
+  return null;
+}
+
+function mapsHref(listing) {
+  const q = [listing.street, listing.city, listing.state, listing.zip]
+    .filter(Boolean)
+    .join(", ");
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+}
+
 /* --- filtering ----------------------------------------------------------- */
-/** Scope = query + selected state. Chip counts are measured against this. */
 function inScope(listing) {
   if (state.stateCode && listing.state !== state.stateCode) return false;
   const q = state.query.trim().toLowerCase();
   if (!q) return true;
   return (
     listing.name.toLowerCase().includes(q) ||
+    (listing.legalName || "").toLowerCase().includes(q) ||
     listing.city.toLowerCase().includes(q) ||
+    (listing.county || "").toLowerCase().includes(q) ||
     listing.state.toLowerCase() === q ||
-    listing.stateName.toLowerCase().includes(q) ||
     listing.zip.startsWith(q) ||
-    listing.categories.some((c) => c.toLowerCase().includes(q))
+    listing.id.toLowerCase().includes(q) ||
+    (listing.street || "").toLowerCase().includes(q)
   );
 }
 
 const FILTER_TESTS = {
   rec: (l) => l.access === "rec" || l.access === "both",
   med: (l) => l.access === "med" || l.access === "both",
+  storefront: (l) => l.storefront,
   delivery: (l) => l.delivery,
-  open: (l) => isOpenNow(l),
-  verified: (l) => l.verified,
-  ada: (l) => l.services.includes("ADA accessible"),
 };
 
 function passesFilters(listing) {
@@ -2295,33 +2214,18 @@ function passesFilters(listing) {
   return true;
 }
 
-/* --- relevance ----------------------------------------------------------- */
+/* --- ranking ------------------------------------------------------------- */
 /*
- * "Best match" is a PRECEDENCE CHAIN, not a weighted sum.
+ * Precedence chain, not a weighted sum. A sum lets any term be out-voted by a
+ * coalition of the others, which is how a farther shop previously climbed
+ * above a nearer one; strict precedence has to be ordered comparisons.
  *
- * This started life as a sum of weights, and that could not express the rule
- * the directory actually needs. In a sum, every term can be out-voted by a
- * coalition of the others: at 3.6 vs 4.5 miles a hyperbolic proximity curve
- * differs by only ~6 points, which a "verified" bonus plus a rating edge
- * beats outright - so a farther shop climbed above a nearer one. Retuning the
- * constants only pushes that failure further out, because any decaying curve
- * flattens. Strict precedence has to be expressed as ordered comparisons.
+ * Proximity outranks everything else once a location is known, because the
+ * person searching needs the closest real door. Half-mile banding stops a
+ * 50-foot difference from reordering the list.
  *
- * The order, for someone who needs somewhere NOW:
- *
- *   1. Open now beats closed. A closed counter cannot help in an urgent
- *      moment, however near it is.
- *   2. Nearer beats farther, measured in half-mile bands. Banding is what
- *      stops a 50-foot difference from outranking a whole star: inside the
- *      same band the two shops are "equally close" and quality decides.
- *   3. Then how well the text matched (an exact ZIP is the strongest signal
- *      a searcher can give).
- *   4. Only then rating, verification, and name.
- *
- * Rating is never consulted until distance has already tied, so no star count
- * can lift a farther shop above a nearer one. With no anchor (nothing searched
- * yet) step 2 is skipped and quality does the separating, which is the right
- * behaviour for browsing.
+ * There is no "open now" tier any more: regulators do not publish opening
+ * hours, so claiming to know them would be a lie.
  */
 const BAND_MILES = 0.5;
 
@@ -2334,7 +2238,6 @@ const TEXT_WEIGHT = {
   namePartial: 15,
 };
 
-/** How well a listing answers the typed query. Distance plays no part here. */
 function textScore(listing) {
   const q = state.query.trim().toLowerCase();
   if (!q) return 0;
@@ -2354,77 +2257,50 @@ function textScore(listing) {
   return score;
 }
 
-/** Half-mile band, or null when nothing has been searched yet. */
 function distanceBand(listing) {
   const miles = milesFromAnchor(listing);
   return miles === null ? null : Math.round(miles / BAND_MILES);
 }
 
 function bestMatch(a, b) {
-  // 1. open beats closed, always
-  const aOpen = isOpenNow(a);
-  const bOpen = isOpenNow(b);
-  if (aOpen !== bOpen) return aOpen ? -1 : 1;
-
-  // 2. nearer band beats farther band
+  // 1. a placed listing beats one whose address the state withholds
   const aBand = distanceBand(a);
   const bBand = distanceBand(b);
-  if (aBand !== null && bBand !== null && aBand !== bBand) return aBand - bBand;
-
-  // 3. how well the query matched
+  if (state.anchor) {
+    if ((aBand === null) !== (bBand === null)) return aBand === null ? 1 : -1;
+    if (aBand !== null && bBand !== null && aBand !== bBand) return aBand - bBand;
+  }
+  // 2. how well the query matched
   const byText = textScore(b) - textScore(a);
   if (byText !== 0) return byText;
-
-  // 4. quality, only now that everything above has tied
-  return (
-    b.rating - a.rating ||
-    Number(b.verified) - Number(a.verified) ||
-    a.name.localeCompare(b.name)
-  );
+  // 3. stable, predictable last resort
+  return a.city.localeCompare(b.city) || a.name.localeCompare(b.name);
 }
 
 const SORTERS = {
   relevance: bestMatch,
-  rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews,
-  name: (a, b) => a.name.localeCompare(b.name),
-  // Raw distance, ignoring opening hours - the one sort that answers
-  // "what is physically closest" without any judgement mixed in.
   distance: (a, b) => {
     const da = milesFromAnchor(a);
     const db = milesFromAnchor(b);
-    if (da === null || db === null) return bestMatch(a, b);
+    if (da === null && db === null) return bestMatch(a, b);
+    if (da === null) return 1;
+    if (db === null) return -1;
     return da - db || bestMatch(a, b);
   },
+  name: (a, b) => a.name.localeCompare(b.name),
+  city: (a, b) => a.city.localeCompare(b.city) || a.name.localeCompare(b.name),
 };
 
 function visibleListings() {
   const scoped = LISTINGS.filter(inScope);
   const filtered = scoped.filter(passesFilters);
-  return { scoped, filtered: filtered.sort(SORTERS[state.sort] || SORTERS.relevance) };
+  return { scoped, filtered: filtered.sort(SORTERS[state.sort] || bestMatch) };
 }
 
-/* --- rendering: cards ---------------------------------------------------- */
-function programBadge(listing) {
-  if (listing.access === "med") {
-    return el("span", { class: "badge badge--lav", text: "Medical only" });
-  }
-  if (listing.access === "both") {
-    return el("span", { class: "badge badge--gold", text: "Adult-use + medical" });
-  }
-  return el("span", { class: "badge badge--gold", text: "Adult-use 21+" });
-}
-
-function openBadge(listing) {
-  if (isOpenNow(listing)) {
-    return el("span", { class: "badge badge--money" }, [
-      el("i", { class: "dot" }),
-      "Open now",
-    ]);
-  }
-  return el("span", {
-    class: "badge badge--off",
-    text: "Opens " + formatTime(listing.hours.open),
-  });
+/* --- cards --------------------------------------------------------------- */
+function accessBadge(listing) {
+  const cls = listing.access === "med" ? "badge badge--lav" : "badge badge--gold";
+  return el("span", { class: cls, text: ACCESS_LABELS[listing.access] });
 }
 
 function buildCard(listing) {
@@ -2436,30 +2312,28 @@ function buildCard(listing) {
       class: "card",
       type: "button",
       dataset: { id: listing.id },
-      "aria-label": listing.name + ", " + listing.city + ", " + listing.state + ". View details.",
+      "aria-label": listing.name + ", " + listing.city + ", " + listing.state + ". View licence details.",
     },
     [
       el("div", { class: "card-head" }, [
         el("h3", { text: listing.name }),
-        el("span", { class: "card-rating" }, [
-          "★ " + listing.rating.toFixed(1),
-          el("small", { text: "(" + listing.reviews + ")" }),
-        ]),
+        miles && el("span", { class: "card-rating", text: miles }),
       ]),
       el("p", { class: "card-meta" }, [
-        el("b", { text: listing.city + ", " + listing.state + " " + listing.zip }),
-        miles ? "  ·  " + miles + " away" : "",
+        listing.street ? el("b", { text: listing.street }) : el("b", { text: "Address not published" }),
         el("br"),
-        listing.street + "  ·  " + listing.priceTier,
+        listing.city + ", " + listing.state + " " + listing.zip +
+          (listing.county ? "  ·  " + listing.county + " County" : ""),
       ]),
       el("div", { class: "badges" }, [
-        programBadge(listing),
-        openBadge(listing),
-        listing.delivery && el("span", { class: "badge", text: "Delivery" }),
-        listing.verified && el("span", { class: "badge badge--gold", text: "Verified" }),
+        accessBadge(listing),
+        listing.storefront
+          ? el("span", { class: "badge badge--money", text: "Storefront" })
+          : el("span", { class: "badge", text: "Delivery only" }),
+        listing.delivery && listing.storefront && el("span", { class: "badge", text: "Delivery" }),
       ]),
       el("div", { class: "card-foot" }, [
-        el("span", { class: "card-tags", text: listing.categories.slice(0, 3).join(" / ") }),
+        el("span", { class: "card-tags", text: "Licence " + listing.id }),
         el("span", { class: "card-cta" }, ["Details", el("span", { text: "→" })]),
       ]),
     ]
@@ -2469,68 +2343,58 @@ function buildCard(listing) {
   return card;
 }
 
-/* --- rendering: detail dialog ------------------------------------------- */
+/* --- detail dialog ------------------------------------------------------- */
 const dialog = $("detail");
 
 function openDetail(listing) {
-  const program = PROGRAM_LABELS[listing.program];
+  const info = STATE_BY_CODE[listing.state];
   const miles = formatMiles(milesFromAnchor(listing));
-  const stateInfo = STATE_BY_CODE[listing.state];
+  const src = SOURCES.find((s) => s.state === listing.state);
 
   $("detailName").textContent = listing.name;
   $("detailAddress").textContent =
-    listing.street + ", " + listing.city + ", " + listing.state + " " + listing.zip +
+    (listing.street ? listing.street + ", " : "") +
+    listing.city + ", " + listing.state + " " + listing.zip +
     (miles ? "  ·  " + miles + " away" : "");
 
   const facts = el("dl", { class: "detail-grid" }, [
-    el("div", {}, [el("dt", { text: "Program" }), el("dd", { text: program.long })]),
-    el("div", {}, [
-      el("dt", { text: "Hours today" }),
-      el("dd", { text: formatTime(listing.hours.open) + " - " + formatTime(listing.hours.close) }),
-    ]),
-    el("div", {}, [
-      el("dt", { text: "Status" }),
-      el("dd", { text: isOpenNow(listing) ? "Open now" : "Closed" }),
-    ]),
-    el("div", {}, [
-      el("dt", { text: "Rating" }),
-      el("dd", { text: listing.rating.toFixed(1) + " / 5  (" + listing.reviews + " reviews)" }),
-    ]),
-    el("div", {}, [el("dt", { text: "Price" }), el("dd", { text: listing.priceTier })]),
-    el("div", {}, [
-      el("dt", { text: "Verification" }),
-      el("dd", { text: listing.verified ? "Verified listing" : "Unverified" }),
-    ]),
+    el("div", {}, [el("dt", { text: "Licence number" }), el("dd", { text: listing.id })]),
+    el("div", {}, [el("dt", { text: "Licence type" }), el("dd", { text: listing.licenseType })]),
+    el("div", {}, [el("dt", { text: "Permits" }), el("dd", { text: ACCESS_LABELS[listing.access] })]),
+    el("div", {}, [el("dt", { text: "Status" }), el("dd", { text: "Active" })]),
+    listing.expires &&
+      el("div", {}, [el("dt", { text: "Expires" }), el("dd", { text: listing.expires })]),
+    listing.legalName &&
+      el("div", {}, [el("dt", { text: "Legal name" }), el("dd", { text: listing.legalName })]),
+  ]);
+
+  const actions = el("div", { class: "badges detail-actions" }, [
+    el("a", { class: "button button--sm", href: mapsHref(listing), target: "_blank", rel: "noopener noreferrer" },
+      ["Directions"]),
+    telHref(listing.phone) &&
+      el("a", { class: "button button--sm button--ghost", href: telHref(listing.phone) }, [listing.phone]),
   ]);
 
   $("detailBody").replaceChildren(
     facts,
-    el("div", { class: "detail-section" }, [
-      el("h4", { text: "Services" }),
-      el("div", { class: "badges" },
-        listing.services.map((s) => el("span", { class: "badge", text: s }))),
-    ]),
-    el("div", { class: "detail-section" }, [
-      el("h4", { text: "Categories" }),
-      el("div", { class: "badges" },
-        listing.categories.map((c) => el("span", { class: "badge badge--gold", text: c }))),
-    ]),
+    el("div", { class: "detail-section" }, [el("h4", { text: "Go there" }), actions]),
     el("p", {
       class: "detail-note",
       text:
-        "Sample listing. " + listing.stateName + " is regulated by the " +
-        stateInfo.regulator + ". Status snapshot " + DATA_AS_OF +
-        " - confirm current rules and licences with the regulator. " +
-        "Nothing here is an offer to sell.",
+        "Licence record from the " + (src ? src.source : info.regulator) +
+        (src && src.refreshed ? ", refreshed " + src.refreshed : "") +
+        ". Fast Gas publishes no ratings, hours or prices because the regulator " +
+        "does not publish them - call ahead to confirm opening times and stock. " +
+        "A licence being active is not a guarantee the premises is currently trading.",
     })
   );
 
   if (typeof dialog.showModal === "function") dialog.showModal();
 }
 
-/* --- rendering: legality panel ------------------------------------------ */
-function countStatesWithListings() {
-  return new Set(LISTINGS.map((l) => l.state)).size;
+/* --- legality + coverage panel ------------------------------------------ */
+function coverageFor(code) {
+  return SOURCES.find((s) => s.state === code) || null;
 }
 
 function renderLegality() {
@@ -2543,46 +2407,52 @@ function renderLegality() {
   if (!state.stateCode) {
     panel.dataset.tone = "money";
     flag.textContent = "US";
-    title.textContent = "Nationwide view";
+    const names = SOURCES.map((s) => STATE_BY_CODE[s.state].name).join(", ");
+    title.textContent = "Verified coverage: " + (names || "none loaded");
     bodyText.textContent =
-      "Showing every sample listing across " + countStatesWithListings() +
-      " states. Search a ZIP or pick a state to see the program that applies there.";
+      LISTINGS.length +
+      " currently-licensed retailers, taken from state licence registers. " +
+      "States outside that list are not yet covered - pick one to see its status.";
     action.hidden = true;
     return;
   }
 
   const info = STATE_BY_CODE[state.stateCode];
   const program = PROGRAM_LABELS[info.program];
+  const src = coverageFor(info.code);
   panel.dataset.tone = program.tone;
   flag.textContent = info.code;
   title.textContent = info.name + " - " + program.long;
 
-  const hasListings = LISTINGS.some((l) => l.state === info.code);
   if (info.program === "none") {
     bodyText.textContent =
-      info.name + " has no public cannabis program, so there are no legal retail " +
-      "dispensaries to list. " + info.regulator + ". Snapshot " + DATA_AS_OF +
-      " - verify before you travel.";
+      info.name + " has no public cannabis programme, so there are no licensed " +
+      "retailers to list. " + info.regulator + ".";
   } else if (info.program === "cbd") {
     bodyText.textContent =
-      info.name + " permits low-THC or CBD products only - not retail cannabis " +
-      "dispensaries. Regulator: " + info.regulator + ". Snapshot " + DATA_AS_OF +
-      " - verify before you travel.";
-  } else if (!hasListings) {
+      info.name + " permits low-THC or CBD products only, not retail cannabis " +
+      "dispensaries. Regulator: " + info.regulator + ".";
+  } else if (src) {
     bodyText.textContent =
-      info.name + " runs a " + program.long.toLowerCase() + " program, but this " +
-      "concept dataset carries no sample metros there yet. Regulator: " + info.regulator + ".";
+      "Verified from the " + src.source +
+      (src.refreshed ? ", refreshed " + src.refreshed : "") + ". " +
+      src.count + " active retail licences" +
+      (src.addressWithheldCount
+        ? ", plus " + src.addressWithheldCount + " whose premises address the state withholds from publication."
+        : ".");
   } else {
     bodyText.textContent =
-      program.long + ". Regulator: " + info.regulator + ". Snapshot " + DATA_AS_OF +
-      " - confirm current rules with the regulator.";
+      info.name + " runs a " + program.long.toLowerCase() + " programme and has " +
+      "licensed retailers, but Fast Gas does not cover it yet - we only publish " +
+      "registers we have verified against the regulator (" + info.regulator + "). " +
+      "Nothing is shown rather than something invented.";
   }
 
   action.hidden = false;
   action.textContent = "Clear state";
 }
 
-/* --- rendering: state grid ---------------------------------------------- */
+/* --- state grid ---------------------------------------------------------- */
 function renderStateGrid() {
   const counts = LISTINGS.reduce((acc, l) => {
     acc[l.state] = (acc[l.state] || 0) + 1;
@@ -2592,19 +2462,27 @@ function renderStateGrid() {
   const tiles = STATES.map((info) => {
     const count = counts[info.code] || 0;
     const program = PROGRAM_LABELS[info.program];
+    const covered = COVERED_STATES.has(info.code);
+    const retailState = info.program === "rec" || info.program === "med";
+
+    let footer;
+    if (count) footer = count.toLocaleString() + " listed";
+    else if (retailState && !covered) footer = "Not covered yet";
+    else footer = program.short;
+
     const tile = el(
       "button",
       {
-        class: "state-tile",
+        class: "state-tile" + (covered ? " state-tile--covered" : ""),
         type: "button",
         dataset: { program: info.program, code: info.code },
-        "aria-label": info.name + ". " + program.long + ". " + count + " sample listings.",
+        "aria-label": info.name + ". " + program.long + ". " + footer + ".",
       },
       [
         el("em", { "aria-hidden": "true" }),
         el("b", { text: info.code }),
         el("span", { text: info.name }),
-        el("small", { text: count ? count + " listings" : program.short }),
+        el("small", { text: footer }),
       ]
     );
     tile.addEventListener("click", () => {
@@ -2612,9 +2490,9 @@ function renderStateGrid() {
       state.query = "";
       state.filters.clear();
       $("query").value = "";
-      const metro = METROS.find((m) => m.state === info.code);
-      state.anchor = metro || null;
-      state.sort = metro ? "distance" : "relevance";
+      const inState = LISTINGS.filter((l) => l.state === info.code);
+      state.anchor = inState.length ? anchorForCity(inState[0].city, LISTINGS) : null;
+      state.sort = state.anchor ? "distance" : "relevance";
       $("sort").value = state.sort;
       state.limit = PAGE_SIZE;
       update();
@@ -2626,63 +2504,47 @@ function renderStateGrid() {
   $("stateGrid").replaceChildren(...tiles);
 }
 
-/* --- rendering: stats + ticker ------------------------------------------ */
+/* --- stats + sources ----------------------------------------------------- */
 function renderStats() {
-  $("statListings").textContent = String(LISTINGS.length);
-  $("statStates").textContent = String(countStatesWithListings());
-  $("statMetros").textContent = String(
-    new Set(LISTINGS.map((l) => l.city + "|" + l.state)).size
-  );
+  $("statListings").textContent = LISTINGS.length.toLocaleString();
+  $("statStates").textContent = String(SOURCES.length);
+  $("statMetros").textContent = String(new Set(LISTINGS.map((l) => l.city + "|" + l.state)).size);
   $("statRec").textContent = String(STATES.filter((s) => s.program === "rec").length);
-  $("asOf").textContent = DATA_AS_OF;
+  const refreshed = SOURCES.map((s) => s.refreshed).filter(Boolean).sort().pop();
+  $("asOf").textContent = refreshed || "-";
 }
 
-function renderTicker() {
-  const cities = [...new Set(LISTINGS.map((l) => l.city + ", " + l.state))];
-  const run = () => {
-    const span = el("span");
-    cities.forEach((city) => {
-      span.append(document.createTextNode(city + " "));
-      span.append(el("b", { text: "✦" }));
-      span.append(document.createTextNode(" "));
-    });
-    return span;
-  };
-  // Two identical runs: the marquee translates -50%, so the seam is invisible.
-  $("ticker").replaceChildren(run(), run());
-}
-
-/* --- rendering: hero colour key ----------------------------------------- */
-/*
- * The key is derived from STATES, never typed by hand - so the counts in the
- * hero can never drift away from the state grid further down the page.
- */
 function renderHeroKey() {
-  const order = ["rec", "med", "cbd", "none"];
-  const counts = STATES.reduce((acc, s) => {
-    acc[s.program] = (acc[s.program] || 0) + 1;
-    return acc;
-  }, {});
-
-  const rows = order.map((key) =>
-    el("div", { class: "hero-key-row", dataset: { program: key } }, [
+  const rows = SOURCES.map((s) =>
+    el("div", { class: "hero-key-row", dataset: { program: "rec" } }, [
       el("i", { "aria-hidden": "true" }),
-      el("span", { text: PROGRAM_LABELS[key].long }),
-      el("b", { text: (counts[key] || 0) + " states" }),
+      el("span", { text: STATE_BY_CODE[s.state].name + " - " + s.source }),
+      el("b", { text: s.count.toLocaleString() }),
+    ])
+  );
+
+  const pending = STATES.filter(
+    (s) => (s.program === "rec" || s.program === "med") && !COVERED_STATES.has(s.code)
+  ).length;
+
+  rows.push(
+    el("div", { class: "hero-key-row", dataset: { program: "none" } }, [
+      el("i", { "aria-hidden": "true" }),
+      el("span", { text: "States with retail, not yet covered" }),
+      el("b", { text: String(pending) }),
     ])
   );
 
   $("heroKey").replaceChildren(
-    el("div", { class: "hero-key-head", text: "What the colours mean" }),
+    el("div", { class: "hero-key-head", text: "Where the data comes from" }),
     ...rows
   );
 }
 
-/* --- the single repaint -------------------------------------------------- */
+/* --- repaint ------------------------------------------------------------- */
 function update() {
   const { scoped, filtered } = visibleListings();
 
-  // Chip counts measure the scope, so each label tells you what it would yield.
   document.querySelectorAll(".chip-count").forEach((node) => {
     const key = node.dataset.count;
     node.textContent = String(
@@ -2702,11 +2564,19 @@ function update() {
 
   if (!filtered.length) {
     const info = state.stateCode ? STATE_BY_CODE[state.stateCode] : null;
-    const reason =
-      info && (info.program === "none" || info.program === "cbd")
-        ? info.name + " has no legal retail dispensaries to list, so this is the " +
-          "correct result rather than a search failure."
-        : "Nothing matches that combination. Try clearing a filter or widening the search.";
+    let reason;
+    if (info && (info.program === "none" || info.program === "cbd")) {
+      reason =
+        info.name + " has no licensed retail dispensaries, so this is the correct " +
+        "answer rather than a search failure.";
+    } else if (info && !COVERED_STATES.has(info.code)) {
+      reason =
+        info.name + " is not covered yet. It has licensed retailers; Fast Gas just " +
+        "has not verified its register against " + info.regulator + " yet, and will " +
+        "not invent listings to fill the gap.";
+    } else {
+      reason = "Nothing matches that combination. Try clearing a filter or widening the search.";
+    }
     results.replaceChildren(
       el("div", { class: "empty" }, [
         el("h3", { text: "No listings here" }),
@@ -2717,12 +2587,20 @@ function update() {
     results.replaceChildren(...page.map(buildCard));
   }
 
+  // Say what is actually on screen: a ZIP search shows the whole state
+  // ordered by distance, and calling that "1,393 in California" hides the
+  // fact that the top of the list is the nearest few.
+  const nearNote = state.anchor
+    ? "  ·  nearest first" + (page.length < filtered.length ? " (" + page.length + " shown)" : "")
+    : page.length < filtered.length
+      ? "  ·  showing " + page.length
+      : "";
   $("resultCount").replaceChildren(
-    el("b", { text: String(filtered.length) }),
+    el("b", { text: filtered.length.toLocaleString() }),
     document.createTextNode(
-      " listing" + (filtered.length === 1 ? "" : "s") +
-      (state.stateCode ? " in " + STATE_BY_CODE[state.stateCode].name : " nationwide") +
-      (page.length < filtered.length ? "  ·  showing " + page.length : "")
+      " licensed retailer" + (filtered.length === 1 ? "" : "s") +
+      (state.stateCode ? " in " + STATE_BY_CODE[state.stateCode].name : "") +
+      nearNote
     )
   );
 
@@ -2731,73 +2609,76 @@ function update() {
   $("loadMore").hidden = page.length >= filtered.length;
 }
 
-/* --- search resolution --------------------------------------------------- */
-/**
- * One text box, three kinds of answer: a ZIP, a city, or a state. Resolving
- * in that order matters - "10011" must never be read as a city name.
- */
+/* --- search -------------------------------------------------------------- */
 function resolveSearch(raw) {
   const value = raw.trim();
   if (!value) return { ok: false, message: "Enter a ZIP code, city or state." };
 
-  // 1. ZIP
   if (/^\d+$/.test(value)) {
     if (value.length !== 5) {
-      return { ok: false, message: "US ZIP codes are five digits. Try 94607." };
+      return { ok: false, message: "US ZIP codes are five digits. Try 94541." };
     }
     const code = stateFromZip(value);
     const info = code ? STATE_BY_CODE[code] : null;
     if (!info) {
-      return {
-        ok: false,
-        message: value + " does not resolve to one of the 50 states or D.C.",
-      };
+      return { ok: false, message: value + " does not resolve to a US state or D.C." };
     }
-    const anchor = anchorForZip(value);
+    const anchor = anchorForZip(value, LISTINGS);
     const program = PROGRAM_LABELS[info.program];
-    return {
-      ok: true,
-      stateCode: code,
-      anchor,
-      message:
-        value + " is in " + info.name + " - " + program.long + "." +
-        (anchor ? " Nearest sample metro: " + anchor.city + "." : " No sample metros in this state."),
-    };
+
+    let message = value + " is in " + info.name + " - " + program.long + ".";
+    if (!COVERED_STATES.has(code) && (info.program === "rec" || info.program === "med")) {
+      message += " Not covered yet, so no listings are shown.";
+    } else if (!anchor) {
+      message += " No licensed retailers found near that ZIP.";
+    }
+    return { ok: true, stateCode: code, anchor, message };
   }
 
   const lower = value.toLowerCase();
 
-  // 2. City
-  const metro =
-    METROS.find((m) => m.city.toLowerCase() === lower) ||
-    METROS.find((m) => m.city.toLowerCase().startsWith(lower));
-  if (metro) {
-    const info = STATE_BY_CODE[metro.state];
+  const cityAnchor = anchorForCity(value, LISTINGS);
+  if (cityAnchor) {
+    const match = LISTINGS.find((l) => l.city.toLowerCase() === lower);
     return {
       ok: true,
-      stateCode: metro.state,
-      anchor: metro,
-      query: metro.city,
-      message: metro.city + ", " + metro.state + " - " + PROGRAM_LABELS[info.program].long + ".",
+      stateCode: match.state,
+      anchor: cityAnchor,
+      query: match.city,
+      message: match.city + ", " + match.state + " - " +
+        LISTINGS.filter((l) => l.city.toLowerCase() === lower).length +
+        " licensed retailers.",
     };
   }
 
-  // 3. State, by name or two-letter code
   const info =
     STATES.find((s) => s.name.toLowerCase() === lower) ||
     STATES.find((s) => s.code.toLowerCase() === lower) ||
     STATES.find((s) => s.name.toLowerCase().startsWith(lower));
   if (info) {
-    const anchor = METROS.find((m) => m.state === info.code) || null;
+    const inState = LISTINGS.filter((l) => l.state === info.code);
     return {
       ok: true,
       stateCode: info.code,
-      anchor,
+      anchor: inState.length ? anchorForCity(inState[0].city, LISTINGS) : null,
       message: info.name + " - " + PROGRAM_LABELS[info.program].long + ".",
     };
   }
 
-  return { ok: false, message: 'No ZIP, city or state matched "' + value + '".' };
+  // Fall back to a plain text search over names and addresses.
+  const hits = LISTINGS.filter((l) =>
+    l.name.toLowerCase().includes(lower) || (l.street || "").toLowerCase().includes(lower));
+  if (hits.length) {
+    return {
+      ok: true,
+      stateCode: null,
+      anchor: null,
+      query: value,
+      message: hits.length + " retailers match “" + value + "” by name or address.",
+    };
+  }
+
+  return { ok: false, message: "No ZIP, city, state or retailer matched “" + value + "”." };
 }
 
 function applySearch(raw, resultNode, inputNode) {
@@ -2885,7 +2766,7 @@ function wireToolbar() {
     update();
   });
 
-  const reset = () => {
+  $("resetFilters").addEventListener("click", () => {
     state.query = "";
     state.filters.clear();
     state.stateCode = null;
@@ -2897,10 +2778,8 @@ function wireToolbar() {
     $("heroResult").textContent = "";
     $("heroResult").classList.remove("error");
     update();
-  };
+  });
 
-  $("resetFilters").addEventListener("click", reset);
-  // The legality panel's action clears the state selection only.
   $("legalityAction").addEventListener("click", () => {
     state.stateCode = null;
     state.anchor = null;
@@ -2916,73 +2795,13 @@ function wireToolbar() {
   });
 }
 
-function wireSignup() {
-  const form = $("signupForm");
-  const email = $("email");
-  const zip = $("signupZip");
-  const zipState = $("signupState");
-  const ageCheck = $("ageCheck");
-  const result = $("signupResult");
-
-  // Live ZIP -> state readout, using the same lookup the directory uses, so
-  // the form can never disagree with the search.
-  zip.addEventListener("input", () => {
-    zip.value = zip.value.replace(/\D/g, "").slice(0, 5);
-    zip.removeAttribute("aria-invalid");
-    const code = zip.value.length === 5 ? stateFromZip(zip.value) : null;
-    const info = code ? STATE_BY_CODE[code] : null;
-    zipState.value = info ? info.code + " - " + PROGRAM_LABELS[info.program].short : "";
-  });
-
-  email.addEventListener("input", () => email.removeAttribute("aria-invalid"));
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    result.classList.remove("error");
-
-    const fail = (message, node) => {
-      result.textContent = message;
-      result.classList.add("error");
-      if (node) {
-        node.setAttribute("aria-invalid", "true");
-        node.focus();
-      }
-    };
-
-    if (!email.value.trim() || !email.validity.valid) {
-      return fail("Enter a valid email address.", email);
-    }
-    if (!/^\d{5}$/.test(zip.value)) {
-      return fail("Enter a valid five-digit US ZIP code.", zip);
-    }
-    if (!STATE_BY_CODE[stateFromZip(zip.value)]) {
-      return fail(zip.value + " does not resolve to a US state or D.C.", zip);
-    }
-    if (!ageCheck.checked) {
-      result.textContent = "Please confirm you are 21 or older.";
-      result.classList.add("error");
-      ageCheck.focus();
-      return;
-    }
-
-    result.textContent =
-      "Demo complete. Nothing was sent, subscribed or stored - there is no backend to send it to.";
-    form.reset();
-    zipState.value = "";
-    email.removeAttribute("aria-invalid");
-    zip.removeAttribute("aria-invalid");
-  });
-}
-
 function wireNav() {
   const toggle = $("navToggle");
   const links = $("navLinks");
-
   const setOpen = (open) => {
     links.dataset.open = String(open);
     toggle.setAttribute("aria-expanded", String(open));
   };
-
   toggle.addEventListener("click", () => setOpen(links.dataset.open !== "true"));
   links.addEventListener("click", (event) => {
     if (event.target.closest("a")) setOpen(false);
@@ -2993,15 +2812,40 @@ function wireNav() {
 }
 
 /* --- boot ---------------------------------------------------------------- */
-renderStats();
-renderHeroKey();
-renderTicker();
-renderStateGrid();
-wireHero();
-wireToolbar();
-wireSignup();
-wireNav();
-update();
+async function boot() {
+  $("resultCount").textContent = "Loading licence registers…";
+
+  const loaded = await loadListings();
+  LISTINGS = loaded.listings;
+  SOURCES = loaded.sources;
+  LOAD_ERRORS = loaded.errors;
+
+  renderStats();
+  renderHeroKey();
+  renderStateGrid();
+  wireHero();
+  wireToolbar();
+  wireNav();
+  update();
+
+  // A failed load must never read as "there is nothing here".
+  if (LOAD_ERRORS.length) {
+    const names = LOAD_ERRORS.map((e) => e.state).join(", ");
+    $("results").prepend(
+      el("div", { class: "empty" }, [
+        el("h3", { text: "Could not load " + names }),
+        el("p", {
+          text:
+            "The licence register for " + names + " failed to load (" +
+            LOAD_ERRORS[0].message + "). This is a loading failure, not an empty " +
+            "state - reload before concluding there are no retailers there.",
+        }),
+      ])
+    );
+  }
+}
+
+boot();
 
 })();
   </script>

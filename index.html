@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'self'; object-src 'none'">
-  <title>Fast Gas - Nationwide Dispensary Directory</title>
-  <meta name="description" content="Fast Gas is a nationwide cannabis dispensary directory concept: search any US ZIP code, see your state's program status, and browse sample listings across all 50 states. 21+. No sales are processed.">
+  <title>Fast Gas - Licensed Dispensary Directory</title>
+  <meta name="description" content="Fast Gas lists currently-licensed US cannabis retailers taken from state regulators' public licence registers. Search any ZIP code. No ratings, hours or prices are invented. 21+.">
   <meta name="theme-color" content="#04170f">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +83,7 @@
 
   <div class="topbar">
     <strong>21+ only</strong> &nbsp;/&nbsp; Nationwide directory concept &nbsp;/&nbsp;
-    <em>No sales, carts or payments on this site</em>
+    <em>Licence data from state regulators &middot; no sales on this site</em>
   </div>
 
   <header>
@@ -115,21 +115,22 @@
           <p class="hero-kicker"><span class="pulse" aria-hidden="true"></span> All 50 states &middot; 21+ &middot; Updated snapshot</p>
           <h1>Every state.<span class="tint-gold">Every legal</span><span class="tint-lav">storefront.</span></h1>
           <p class="hero-copy">
-            Fast Gas is a nationwide dispensary directory. Drop in any US ZIP
-            code and it tells you the state program that applies, what that
-            legally permits, and which listings nearby match what you need.
+            Every retailer here holds a current licence, taken straight from
+            state regulators' public registers. Drop in any US ZIP code and it
+            tells you the programme that applies and the nearest licensed doors.
           </p>
           <p class="hero-note">
-            Design concept. State program statuses are a snapshot and change
-            often - always confirm with your state regulator. Listings are
-            clearly labelled sample data; no live inventory, ordering or payment.
+            No ratings, opening hours or prices appear anywhere on this site,
+            because regulators do not publish them and we will not invent them.
+            Call ahead. Coverage is state by state and each state names its
+            source; states we have not verified show nothing rather than guesses.
           </p>
         </div>
 
         <div class="hero-side">
           <div class="console">
           <h2>Search the directory.</h2>
-          <p class="console-sub">ZIP code, city or state - all 50 states resolve.</p>
+          <p class="console-sub">ZIP, city, state, retailer name or licence number.</p>
 
           <form id="heroForm" novalidate>
             <div class="search-row">
@@ -144,10 +145,10 @@
             </div>
             <p class="console-hint">
               Try
-              <button type="button" data-example="94607">94607</button>,
-              <button type="button" data-example="10011">10011</button>,
-              <button type="button" data-example="Denver">Denver</button> or
-              <button type="button" data-example="Oklahoma">Oklahoma</button>.
+              <button type="button" data-example="94541">94541</button>,
+              <button type="button" data-example="Hayward">Hayward</button>,
+              <button type="button" data-example="Union City">Union City</button> or
+              <button type="button" data-example="Redwood City">Redwood City</button>.
             </p>
             <p class="form-result" id="heroResult" role="status" aria-live="polite"></p>
           </form>
@@ -160,9 +161,9 @@
 
     <div class="stat-strip">
       <div class="stats shell" id="statStrip">
-        <div class="stat"><b id="statListings">&mdash;</b><span>Sample listings</span></div>
-        <div class="stat"><b id="statStates">&mdash;</b><span>States with listings</span></div>
-        <div class="stat"><b id="statMetros">&mdash;</b><span>Metro areas</span></div>
+        <div class="stat"><b id="statListings">&mdash;</b><span>Licensed retailers</span></div>
+        <div class="stat"><b id="statStates">&mdash;</b><span>States verified</span></div>
+        <div class="stat"><b id="statMetros">&mdash;</b><span>Cities covered</span></div>
         <div class="stat"><b id="statRec">&mdash;</b><span>Adult-use states</span></div>
       </div>
     </div>
@@ -195,10 +196,10 @@
             <div class="select-wrap">
               <label class="sr-only" for="sort">Sort results</label>
               <select id="sort">
-                <option value="relevance">Sort: best match (open + nearest)</option>
+                <option value="relevance">Sort: best match (nearest)</option>
                 <option value="distance">Sort: nearest</option>
-                <option value="rating">Sort: highest rated</option>
                 <option value="name">Sort: A to Z</option>
+                <option value="city">Sort: by city</option>
               </select>
             </div>
           </div>
@@ -207,10 +208,8 @@
             <button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="chip-count" data-count="all">0</span></button>
             <button class="chip" type="button" data-filter="rec" aria-pressed="false">Adult-use <span class="chip-count" data-count="rec">0</span></button>
             <button class="chip" type="button" data-filter="med" aria-pressed="false">Medical <span class="chip-count" data-count="med">0</span></button>
-            <button class="chip" type="button" data-filter="delivery" aria-pressed="false">Delivery <span class="chip-count" data-count="delivery">0</span></button>
-            <button class="chip" type="button" data-filter="open" aria-pressed="false">Open now <span class="chip-count" data-count="open">0</span></button>
-            <button class="chip" type="button" data-filter="verified" aria-pressed="false">Verified <span class="chip-count" data-count="verified">0</span></button>
-            <button class="chip" type="button" data-filter="ada" aria-pressed="false">ADA access <span class="chip-count" data-count="ada">0</span></button>
+            <button class="chip" type="button" data-filter="storefront" aria-pressed="false">Storefront <span class="chip-count" data-count="storefront">0</span></button>
+            <button class="chip" type="button" data-filter="delivery" aria-pressed="false">Delivery only <span class="chip-count" data-count="delivery">0</span></button>
           </div>
         </div>
 
@@ -254,12 +253,12 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow eyebrow--lav">02 / Coast to coast</p>
-            <h2>All 50 states,<br>plus D.C.</h2>
+            <h2>Coverage,<br>state by state.</h2>
           </div>
           <p>
-            Programs differ state by state, and a directory that pretends
-            otherwise is useless. Pick a state to filter the listings above and
-            read what its program actually permits.
+            Green tiles are verified against that state's regulator. The rest
+            show their programme status but carry no listings yet - we would
+            rather show a gap than fill it with guesses.
           </p>
         </div>
 
@@ -322,23 +321,22 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">04 / Clear by design</p>
-            <h2>What this is.<br>What it is not.</h2>
+            <h2>Where every<br>listing comes from.</h2>
           </div>
           <p>
-            There are no invented ratings on real businesses, no press quotes
-            and no borrowed customer claims. Trust starts with saying plainly
-            what you are looking at.
+            A directory is only worth the accuracy of its worst entry. These are
+            the rules that keep every row checkable against a government register.
           </p>
         </div>
 
         <div class="standards">
           <article class="standard">
             <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-eye"/></svg></div>
-            <h3>Sample listings, labelled</h3>
+            <h3>Real licences, named sources</h3>
             <p>
-              Business names in this directory are fictional and generated.
-              Cities, ZIP codes and state programs are real. Nothing here claims
-              to describe an actual storefront.
+              Every retailer is a currently-active licence pulled from a state
+              regulator's public register. Each state card names its source and
+              the date it was refreshed, so you can check any entry at source.
             </p>
           </article>
           <article class="standard">
@@ -361,11 +359,11 @@
           </article>
           <article class="standard">
             <div class="standard-icon"><svg aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div>
-            <h3>Nothing leaves your browser</h3>
+            <h3>No invented signals</h3>
             <p>
-              There is no cart, no checkout and no backend. Searches and filters
-              run locally; the forms validate and then tell you plainly that
-              nothing was sent or stored.
+              You will find no star ratings, opening hours or prices here.
+              Regulators do not publish them, and inventing them about a named
+              business would misdirect you to a closed or wrong door. Call ahead.
             </p>
           </article>
         </div>
@@ -386,46 +384,54 @@
           <details class="faq-item">
             <summary>Are these real dispensaries?</summary>
             <div class="faq-answer"><p>
-              No. Every business name is fictional and deterministically
-              generated, so the directory can demonstrate real search, filtering
-              and distance behaviour without putting words in a real company's
-              mouth. The cities, ZIP codes and state program statuses are real.
+              Yes. Every listing is a currently-active retail licence taken from a
+              state regulator's public register, with the licence number shown on
+              the card so you can verify it at source. An earlier version of this
+              site used generated sample listings; that data has been removed
+              entirely.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>Can I order from this site?</summary>
+            <summary>Why are there no ratings, hours or prices?</summary>
             <div class="faq-answer"><p>
-              No. There is no cart, checkout, payment processor or backend of any
-              kind. The forms validate your input and then confirm that nothing
-              was transmitted or stored.
+              Because regulators do not publish them. A star rating invented about
+              a named real business is defamatory, and an invented opening time
+              sends you to a locked door. Where we do not have a fact, we show
+              nothing and tell you to call ahead.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>How does the ZIP lookup cover all 50 states?</summary>
+            <summary>Which states are covered?</summary>
             <div class="faq-answer"><p>
-              It uses the public USPS allocation of three-digit ZIP prefixes to
-              states, so any valid five-digit US ZIP resolves - roughly sixty
-              ranges instead of a list of forty thousand codes. Entering a ZIP in
-              a state with no program tells you exactly that, rather than showing
-              an empty result list.
+              Only the states listed in the coverage panel at the top. Each state
+              regulator publishes its register differently - some offer a daily
+              API, some a downloadable file, some only a search page - so states
+              are added one verified source at a time. An uncovered state says so
+              plainly instead of showing an empty list you might read as "none here".
+            </p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Does an active licence mean the shop is open?</summary>
+            <div class="faq-answer"><p>
+              No. It means the state lists the licence as active on the refresh
+              date shown. A business can hold a licence while closed for
+              refurbishment, between premises, or not yet trading. Always call.
             </p></div>
           </details>
           <details class="faq-item">
             <summary>Is the legal status information current?</summary>
             <div class="faq-answer"><p>
-              Treat it as a snapshot, not a source of truth. Cannabis law moves
-              quickly and licensing changes faster. Every state entry names the
-              responsible regulator precisely so you can confirm the current rule
-              before relying on it. This is not legal advice.
+              Treat programme status as a snapshot, not a source of truth. Cannabis
+              law moves quickly. Every state entry names its regulator so you can
+              confirm before relying on it. This is not legal advice.
             </p></div>
           </details>
           <details class="faq-item">
-            <summary>Why do some states show no listings at all?</summary>
+            <summary>Can I order from this site?</summary>
             <div class="faq-answer"><p>
-              Because they have no legal retail dispensaries to list. States with
-              low-THC or CBD-only programs, and states with no program, appear in
-              the state grid with their status but carry no storefront listings.
-              Inventing listings there would be the dishonest option.
+              No. There is no cart, checkout or payment of any kind. The directory
+              points you at a licensed door; everything after that happens between
+              you and the retailer.
             </p></div>
           </details>
         </div>
@@ -482,8 +488,8 @@
             <span class="logo-word">FAST GAS<small>Directory</small></span>
           </a>
           <p class="footer-blurb">
-            A nationwide dispensary directory concept. Real geography, real
-            program statuses, clearly labelled sample listings.
+            Licensed US cannabis retailers, straight from state regulators'
+            public registers. No invented ratings, hours or prices.
           </p>
         </div>
         <div class="footer-col">
@@ -511,8 +517,8 @@
       </div>
 
       <div class="footer-legal">
-        <p><strong>21+ only.</strong> Concept site. No sales, carts or payments. Not legal advice.</p>
-        <p>Program snapshot: <span id="asOf">&mdash;</span> &middot; Confirm with your state regulator.</p>
+        <p><strong>21+ only.</strong> No sales or payments. Licence data is public record. Not legal advice.</p>
+        <p>Licence data refreshed: <span id="asOf">&mdash;</span> &middot; Confirm with your state regulator.</p>
       </div>
     </div>
   </footer>
