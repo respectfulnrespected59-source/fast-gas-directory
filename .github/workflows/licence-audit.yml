@@ -1,0 +1,162 @@
+# The weekly alarm: are the California listings still real, current, legal licences?
+#
+# Every Monday (and on demand) every listing is audited against the LIVE state register
+# (tools/audit-ca.mjs). The run ends in one of four states:
+#   clean  - every listing matches, nothing new: green, nothing pushed
+#   new    - listings all match, new licensed shops exist: green + refreshed data on
+#            auto/licence-refresh + an issue linking the one-click PR
+#   drift  - a live listing is stale (licence no longer Active, expired, moved): RED (GitHub
+#            emails the owner) + the same refreshed, re-audited branch + issue
+#   error  - the audit could not run (register unreachable/partial): RED, nothing changed
+#
+# Fire drill: run it by hand with drill = true. A fake listing is planted into the audit so the
+# whole red path runs on its own branch (auto/licence-refresh-drill) and a "DRILL:" issue.
+# Close that issue and delete that branch after.
+name: Weekly licence audit
+
+on:
+  schedule:
+    - cron: "0 14 * * 1" # Mondays 14:00 UTC = 6 AM Pacific (7 AM in summer)
+  workflow_dispatch:
+    inputs:
+      drill:
+        description: "Fire drill: plant a fake listing so the whole red path runs"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # push the refresh branch
+  issues: write # raise or update the issue
+  actions: write # keep-alive: re-enable this workflow so the schedule is not paused
+
+concurrency:
+  group: licence-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # GitHub pauses schedules in a public repo after 60 days without activity. Best effort only.
+      - name: Keep the schedule alive
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${GITHUB_REPOSITORY}/actions/workflows/licence-audit.yml/enable"
+
+      # A check that cannot fail is not a check. It must exit 1 AND name both planted fakes;
+      # a crash (exit 2) or a pass means this run's verdict cannot be trusted.
+      - name: The alarm can still go red (planted fakes must be caught)
+        run: |
+          set +e
+          out=$(node tools/audit-ca.mjs assets/data/ca.json --plant 2>&1)
+          code=$?
+          set -e
+          echo "$out"
+          if [ "$code" -ne 1 ] || ! grep -q "planted: invented shop" <<<"$out" || ! grep -q "planted: real shop moved 2 km" <<<"$out"; then
+            echo "::error::Self-test failed (exit $code): the audit must exit 1 and catch BOTH planted fakes. This run's verdict cannot be trusted."
+            exit 1
+          fi
+
+      - name: Audit the live listings against the state register
+        id: audit
+        continue-on-error: true
+        run: node tools/audit-ca.mjs assets/data/ca.json ${{ inputs.drill && '--plant' || '' }}
+
+      - name: Read the verdict
+        id: verdict
+        env:
+          FAILING: ${{ steps.audit.outputs.failing }}
+          NEW_SHOPS: ${{ steps.audit.outputs.new_shops }}
+        run: |
+          if [ -z "$FAILING" ]; then state=error
+          elif [ "$FAILING" != "0" ]; then state=drift
+          elif [ "$NEW_SHOPS" != "0" ]; then state=new
+          else state=clean
+          fi
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+          echo "Verdict: $state (failing=${FAILING:-n/a}, new_shops=${NEW_SHOPS:-n/a})"
+
+      - name: Stop when the audit could not run
+        if: steps.verdict.outputs.state == 'error'
+        run: |
+          echo "::error::The audit could not run (state register unreachable or partial). Nothing was changed - re-run this workflow later."
+          exit 1
+
+      - name: Re-fetch from the register and audit the result
+        id: refresh
+        if: steps.verdict.outputs.state == 'drift' || steps.verdict.outputs.state == 'new'
+        run: |
+          node tools/fetch-ca.mjs
+          set +e
+          node tools/audit-ca.mjs assets/data/ca.json
+          code=$?
+          set -e
+          if [ "$code" -ne 0 ]; then
+            echo "::error::The re-fetched data did not pass the audit (exit $code) - nothing was pushed. Read this step's log."
+            exit 1
+          fi
+          # fetch-ca.mjs stamps fetchedAt every run, so compare the LISTINGS, not the file
+          git show HEAD:assets/data/ca.json > "$RUNNER_TEMP/ca_before.json"
+          changed=$(node -e 'const fs = require("fs"); const a = JSON.parse(fs.readFileSync(process.argv[1], "utf8")).listings; const b = JSON.parse(fs.readFileSync("assets/data/ca.json", "utf8")).listings; process.stdout.write(JSON.stringify(a) === JSON.stringify(b) ? "false" : "true")' "$RUNNER_TEMP/ca_before.json")
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "Listings changed: $changed"
+
+      - name: Push the refreshed data and raise the issue
+        if: steps.refresh.outcome == 'success' && (steps.refresh.outputs.changed == 'true' || inputs.drill)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHANGED: ${{ steps.refresh.outputs.changed }}
+          DRILL: ${{ inputs.drill }}
+          FAILING: ${{ steps.audit.outputs.failing }}
+          NEW_SHOPS: ${{ steps.audit.outputs.new_shops }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          if [ "$DRILL" = "true" ]; then
+            BRANCH=auto/licence-refresh-drill
+            export TITLE="DRILL: Licence data needs a refresh from the state register"
+          else
+            BRANCH=auto/licence-refresh
+            export TITLE="Licence data needs a refresh from the state register"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          if [ "$CHANGED" = "true" ]; then
+            git add assets/data/ca.json
+            git commit -m "fix: weekly licence refresh from the DCC register"
+          fi
+          git push --force origin "$BRANCH"
+
+          if [ "${FAILING:-0}" != "0" ]; then
+            FOUND="The weekly audit found **${FAILING} live listing(s)** that no longer match the California DCC register, and **${NEW_SHOPS:-0} new licensed shop(s)** not listed yet."
+          else
+            FOUND="Every live listing still matches the California DCC register. **${NEW_SHOPS:-0} new licensed shop(s)** can be added."
+          fi
+          COMPARE="https://github.com/${GITHUB_REPOSITORY}/compare/master...${BRANCH}?expand=1"
+          BODY=$(printf '%s\n\n%s\n%s\n\n%s\n\n%s\n' \
+            "$FOUND" \
+            "- Findings: ${RUN_URL} (open the run's summary)" \
+            "- Refreshed data, already re-audited clean: branch \`${BRANCH}\`" \
+            "**To fix: open the PR -> ${COMPARE} -> merge.** Render serves the repo root, so the merge is the deploy." \
+            "Rig 2: pull before your next push.")
+          EXISTING=$(gh issue list --state open --json number,title --jq '[.[] | select(.title == $ENV.TITLE)][0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --body "$BODY"
+          fi
+
+      - name: Go red when the live listings were wrong
+        if: steps.verdict.outputs.state == 'drift'
+        run: |
+          echo "::error::Live listings drifted from the state register - see the run summary and the open issue."
+          exit 1

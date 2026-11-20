@@ -84,6 +84,29 @@ Render blueprint (`render.yaml`): static site, publish path `.`, no build
 command. The blueprint sets CSP, HSTS, `X-Frame-Options`,
 `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy`.
 
+## Weekly licence audit (the alarm)
+
+`.github/workflows/licence-audit.yml` runs every Monday at 14:00 UTC and audits
+every listing against the live California DCC register (`tools/audit-ca.mjs`):
+the licence is Active, a retail type, unexpired, at the same street and ZIP,
+and pinned within 50 m of the state's own coordinates. Each run first proves
+the audit still catches a planted fake.
+
+- **Drift** (a listing went stale): the run goes red and GitHub emails the
+  owner. The refreshed, re-audited data is pushed to `auto/licence-refresh`
+  and an issue links the pull request to open and merge.
+- **New shops only**: same branch and issue, the run stays green.
+- **Audit could not run** (register down): red, nothing changed; re-run later.
+- **Fire drill**: Actions -> Weekly licence audit -> Run workflow -> drill. It
+  uses its own branch (`auto/licence-refresh-drill`) and a `DRILL:` issue;
+  close the issue and delete the branch afterwards.
+
+Run it locally: `node tools/audit-ca.mjs` (exit 0 clean, 1 a listing failed,
+2 could not run; add `--plant` to see it fail). GitHub can pause schedules in a
+public repo after 60 days without activity; each run re-enables itself as a
+best-effort keep-alive. If the Monday runs stop appearing under Actions,
+re-enable the workflow there.
+
 ## Tests
 
 `tests/fg-probe.mjs` drives the running site with Playwright: 31 checks
