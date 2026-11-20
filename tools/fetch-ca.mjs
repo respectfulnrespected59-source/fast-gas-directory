@@ -100,17 +100,25 @@ const retail = all.filter((r) => RETAIL_TYPES.includes(r.licenseType));
 console.log("Of those, " + retail.length + " are retail licences.");
 
 const listings = [];
-const skipped = { noName: 0, addressWithheld: 0, noZip: 0 };
+const skipped = { noName: 0, addressWithheld: 0, noZip: 0, expired: 0 };
+const today = new Date().toISOString().slice(0, 10);
 
 for (const r of retail) {
   const name = clean(r.businessDbaName) || clean(r.businessLegalName);
   const lat = Number(r.premiseLatitude);
   const lng = Number(r.premiseLongitude);
   const zip = clean(r.premiseZipCode).slice(0, 5);
+  const expires = (r.expirationDate || "").slice(0, 10);
 
   // A listing nobody can find or name is worse than no listing.
   if (!name) {
     skipped.noName += 1;
+    continue;
+  }
+  // The register can still say "Active" after the expiry date has passed (a renewal the state has
+  // not ruled on yet). The site promises a CURRENT licence, so a lapsed date is counted, not listed.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(expires) && expires < today) {
+    skipped.expired += 1;
     continue;
   }
   // The state withholds some premise addresses entirely ("Not Published").
@@ -146,7 +154,7 @@ for (const r of retail) {
     storefront: !nonStorefront,
     delivery: nonStorefront, // the only delivery fact the state actually asserts
     licenseType: r.licenseType.replace(/Commercial -\s+/, ""),
-    expires: (r.expirationDate || "").slice(0, 10),
+    expires,
   });
 }
 
